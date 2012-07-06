@@ -3,7 +3,7 @@
 #from gi.repository import Gtk
 import sqlite3
 
-conn = sqlite3.connect('pokedex.db')
+conn = sqlite3.connect('../db/pokedex.db')
 c = conn.cursor()
 
 def print_pokemon(pokemon):
