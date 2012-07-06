@@ -13,19 +13,19 @@ def run():
         
         if func == 'h' or func == "help" or func == 'hilfe':
             print 'Sie befinden sich im Pokemonmanager V0.001!'
-            print 'printpokemon oder prp gibt die Daten zum uebergebenen Pokemon aus'
-            print 'print oder pr gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
+            print '"printpokemon" oder "prp" gibt die Daten zum uebergebenen Pokemon aus'
+            print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
             print '\t -g gibt alle gefangenen Pokemon aus'
             print '\t -ung gibt alle ungefangenen Pokemon aus'
             print '\t -ort gibt alle Pokemon mit Fundorten aus'
             print '\t -info gibt alle Pokemon mit Info aus'
             print '\t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
-            print 'addlocation oder addloc fuegt Fundorte zum Pokemon hinzu.'
-            print 'removelocation oder rmloc loescht ein spezifischen Fundort wieder.'
-            print 'addinfo oder addinformation fuegt eine Notiz/Information zum Pokemon hinzu.'
-            print 'removeinformation oder rminfo loescht die Notiz/Information zum Pokemon.'
-            print 'setcatched ct (not i)'
-            print 'unsetcatched uct (not i)'
+            print '"addlocation" oder "addloc" fuegt Fundorte zum Pokemon hinzu.'
+            print '"removelocation" oder "rmloc" loescht ein spezifischen Fundort wieder.'
+            print '"addinfo"  fuegt eine Notiz/Information zum Pokemon hinzu.'
+            print '"removeinformation" oder "rminfo" loescht die Notiz/Information zum Pokemon.'
+            print '"setcatched" oder "ct" markiert ein oder mehrere Pokemon als gefangen.'
+            print '"unsetcatched" oder "uct" markiert ein oder mehrere Pokemon als nicht gefangen.'
             print 'exit beendet dieses Programm'
         elif func == 'exit':
             running = False
