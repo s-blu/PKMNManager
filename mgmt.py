@@ -6,7 +6,11 @@ import sqlite3
 conn = sqlite3.connect('../db/pokedex.db')
 c = conn.cursor()
 
+
+# Gibt ein, mehrere oder alle Pokemon mitsamt Locationinformation aus.
 def print_pokemon(pokemon):
+
+    # Falls Name angegeben wurde, wird die Nummer ermittelt
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = pokemon.capitalize()
         pokemon = (pokemon,)
@@ -14,22 +18,23 @@ def print_pokemon(pokemon):
             pokemon = row_name[0]
             
             
-    pokemon = (pokemon,)    
+    pokemon = (pokemon,)
+    #Ermittung der Pokemoninformationen
     for row in c.execute('select nr, name, catched from pokemon where nr = ?', pokemon):
 
-        catch = ",\t not catched."
+        catch = ",\t nicht gefangen."
         if row[2] != 0:
-            catch = ",\t catched!"
+            catch = ",\t gefangen!"
 
         print str(row[0]) + " " + row[1] + catch
         
+        #Ermittlung der Location-Information
         nummer = (row[0],)
         for row2 in c.execute('select edition, location from locations where nr = ?', nummer):
-            print "\t Catchable in {0}, {1}".format(row2[0], row2[1])
+            print "\t Fangbar in {0}, {1}".format(row2[0], row2[1])
     
 def add_location(pokemon, edition, location):
-    
-    
+
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = (pokemon,)
         for row in c.execute('select nr from pokemon where name = ?', pokemon):
