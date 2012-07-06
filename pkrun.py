@@ -5,15 +5,21 @@
 import sqlite3
 import pkview
 import sys
+import codecs
 
+sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
 
 def run():
+    
+
+
     running = True
     print '====================================================='
-    print 'Willkommen!'
+    print 'Willkommen im Pokemonmanager V0.2.1!'
     print 'prp/print Ausgabe der Pokemon'
     print 'addloc/info rmloc/info Aendern von Fundorten und Info'
-    print 'help bringt Sie zur ausfuehrlichen Hilfe.'
+    print 'exit beendet das Programm'
+    print 'help bringt Sie zur ausfuehrlichen Hilfe.'  
     print '====================================================='
     
     try:
@@ -35,6 +41,8 @@ def run():
                 print '"removeinformation" oder "rminfo" loescht die Notiz/Information zum Pokemon.'
                 print '"setcatched" oder "ct" markiert ein oder mehrere Pokemon als gefangen.'
                 print '"unsetcatched" oder "uct" markiert ein oder mehrere Pokemon als nicht gefangen.'
+                print 'Mehrfachangaben sind bei allen Befehlen moeglich - dazu Pokemonnamen oder Nummern durch , trennen'
+                print '\t Alternativ Ranges angeben, bspw. 3-77 (not impl)'
                 print '"exit" beendet dieses Programm'
             elif func == 'exit':
                 running = False

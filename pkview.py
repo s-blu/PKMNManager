@@ -19,11 +19,8 @@ def print_pokemon(pokem):
 
     pkinfo, locs = pkdao.get_pkinfo(pokem)
     
-    if len(pkinfo) == 0:
-        print "Ungueltiges Pokemon"
-        return
 
-    catch = "nicht gefangen."
+    catch = "( )"
     if pkinfo[2] != 0:
         catch = "gefangen!"
     
@@ -39,20 +36,24 @@ def print_pokemon(pokem):
         print u"\t Fangbar in {0}, {1}".format(loc[0], loc[1])
     if len(locs) > 0:
         print "\t - - - - - - - - - - - - - -"
-        
+       
         
 def add_location():
 
-    pokemon = raw_input('Pokemoninformation? > ')
-    if not pkdao.valid_pk(pokemon):
-        print "Ungueltiges Pokemon"
-        return
+    pokem = raw_input('Pokemonnr oder -name? > ')
     edition = raw_input('Welche Edition? > ')
     location = raw_input('Welche Location? > ')
     
-    pkdao.add_loc(pokemon, edition, location)
+    pkms = pokem.split(',')
     
-    print_pokemon(pokemon)
+    for pokemon in pkms:
+        if not pkdao.valid_pk(pokemon):
+            print "Ungueltiges Pokemon '{0}'".format(pokemon)
+        else:
+            pkdao.add_loc(pokemon, edition, location)
+            
+            print_pokemon(pokemon)
+            
     moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
     moreinput = moreinput.lower()
     
@@ -60,8 +61,12 @@ def add_location():
         edition = raw_input('Welche Edition? > ')
         loc = raw_input('Welche Location? > ')
     
-        pkdao.add_loc(pokemon, edition, loc)
-        print_pokemon(pokemon)
+        for pokemon in pkms:
+            if not pkdao.valid_pk(pokemon):
+                print "Ungueltiges Pokemon '{0}'".format(pokemon)
+            else:
+                pkdao.add_loc(pokemon, edition, loc)
+                print_pokemon(pokemon)
         moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
         moreinput = moreinput.lower()
   
@@ -81,55 +86,89 @@ def printa(arguments):
         print_pokemon(pk)
     
 def rm_location():
-    pokemon = raw_input('Pokemoninformation? > ')
-    if not pkdao.valid_pk(pokemon):
-        print "Ungueltiges Pokemon"
-        return
-    print_pokemon(pokemon)
-    print 'Spezifizieren Sie bitte den Eintrag der geloescht werden soll.'
-    edition = raw_input('Loeschen: Welche Edition? > ')
-    location = raw_input('Loeschen: Welche Location? > ')
-    pkdao.rm_loc(pokemon, edition, location)
-    print_pokemon(pokemon)
+    pokem = raw_input('Pokemonnr oder -name? > ')
     
-    morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
-    morerm = morerm.lower()
+    pkms = pokem.split(',')
     
-    while morerm == 'yes' or morerm == 'y':
+    for pokemon in pkms:
+        if not pkdao.valid_pk(pokemon):
+            print "Ungueltiges Pokemon '{0}'".format(pokemon)
+        else:
+            print_pokemon(pokemon)
+            
+    rmall = raw_input('Sollen alle Eintraege geloescht werden? yes/N > ')
+    rmall = rmall.lower()
+    if rmall == 'yes' or rmall == 'y':
+        for pokemon in pkms:
+            pkdao.rm_all_loc(pokemon)
+            print_pokemon(pokemon)
+        
+    else:
+        print 'Spezifizieren Sie bitte den Eintrag der geloescht werden soll.'
         edition = raw_input('Loeschen: Welche Edition? > ')
         location = raw_input('Loeschen: Welche Location? > ')
-    
-        pkdao.rm_loc(pokemon, edition, location)
-        print_pokemon(pokemon)
+        for pokemon in pkms:
+            pkdao.rm_loc(pokemon, edition, location)
+            print_pokemon(pokemon)
+            
+    if rmall != 'yes' and rmall != 'y':          
         morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
         morerm = morerm.lower()
+        
+        while morerm == 'yes' or morerm == 'y':
+            edition = raw_input('Loeschen: Welche Edition? > ')
+            location = raw_input('Loeschen: Welche Location? > ')
+            for pokemon in pkms:
+                pkdao.rm_loc(pokemon, edition, location)
+                print_pokemon(pokemon)
+            morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
+            morerm = morerm.lower()
 
 def add_info():
-    pokemon = raw_input('Pokemoninformation? > ')
-    if not pkdao.valid_pk(pokemon):
-        print "Ungueltiges Pokemon"
-        return
+    pokem = raw_input('Pokemonnr oder -name? > ')
     info = raw_input('Info? > ')
+    pkms = pokem.split(',')
     
-    pkdao.add_info(pokemon, info)
+    for pokemon in pkms:
+        if not pkdao.valid_pk(pokemon):
+            print "Ungueltiges Pokemon '{0}'".format(pokemon)
+        else:
+            pkdao.add_info(pokemon, unicode(info))
+            print_pokemon(pokemon)
     
 def rm_info():
-    pokemon = raw_input('Von welchem Pokemon wollen Sie die Info loeschen? > ')
-    if not pkdao.valid_pk(pokemon):
-        print "Ungueltiges Pokemon"
-        return
-    pkdao.rm_info(pokemon)
+    pokem = raw_input('Von welchem Pokemon wollen Sie die Info loeschen? > ')
+    pkms = pokem.split(',')
+    
+    for pokemon in pkms:
+        if not pkdao.valid_pk(pokemon):
+            print "Ungueltiges Pokemon '{0}'".format(pokemon)
+        else:
+            pkdao.rm_info(pokemon)
+            print_pokemon(pokemon)
     
 def set_c():
     print 'Herzlichen Glueckwunsch zum Fangerfolg! :)'
-    pokemon = raw_input('Pokemoninformation? (Mehrere durch Kommata trennen) > ')
-    pkdao.set_c(pokemon, 1)
-    print_pokemon(pokemon)
+    pokem = raw_input('Pokemonnr oder -name? > ')
+    pkms = pokem.split(',')
+    
+    for pokemon in pkms:
+        if not pkdao.valid_pk(pokemon):
+            print "Ungueltiges Pokemon '{0}'".format(pokemon)
+        else:
+            pkdao.set_c(pokemon, 1)
+            print_pokemon(pokemon)
    
 def uset_c():
-    pokemon = raw_input('Pokemoninformation? (Mehrere durch Kommata trennen) > ')
-    pkdao.set_c(pokemon, 0)
-    print_pokemon(pokemon)
+    pokem = raw_input('Pokemonnr oder -name? > ')
+    pkms = pokem.split(',')
+    
+    for pokemon in pkms:
+        if not pkdao.valid_pk(pokemon):
+            print "Ungueltiges Pokemon '{0}'".format(pokemon)
+        else:
+            pkdao.set_c(pokemon, 0)
+            print_pokemon(pokemon)
     
 def close():
     pkdao.close()
