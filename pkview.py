@@ -12,12 +12,21 @@ def print_pokemon(pokem):
     catch = "nicht gefangen."
     if pkinfo[2] != 0:
         catch = "gefangen!"
+    
+    info = ''
+    if pkinfo[3] != None:
+        info = "Info: '{0}'".format(pkinfo[3])
+    
+    print u"{0} {1},\t {2} \t {3}".format(pkinfo[0], pkinfo[1], catch, info)
 
-    print u"{0} {1},\t {2}".format(pkinfo[0], pkinfo[1], catch)
-
+    if len(locs) > 0:
+        print "\t - - - - - - - - - - - - - -"
     for loc in locs:
         print u"\t Fangbar in {0}, {1}".format(loc[0], loc[1])
-    
+    if len(locs) > 0:
+        print "\t - - - - - - - - - - - - - -"
+        
+        
 def add_location():
 
     pokemon = raw_input('Pokemoninformation? > ')
@@ -74,7 +83,21 @@ def rm_location():
         print_pokemon(pokemon)
         morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
         morerm = morerm.lower()
+
+def add_info():
+    pokemon = raw_input('Pokemoninformation? > ')
+    info = raw_input('Info? > ')
     
+    pkdao.add_info(pokemon, info)
+    
+def rm_info():
+    print 'Dummy'
+    
+def set_c():
+    print 'Dummy'
+    
+def uset_c():
+    print 'Dummy'
     
 def close():
     pkdao.close()

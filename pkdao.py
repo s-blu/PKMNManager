@@ -18,9 +18,9 @@ def get_pkinfo(pokemon):
             
     pokemon = (pokemon,)
     #Ermittung der Pokemoninformationen
-    for row in c.execute('select nr, name, catched from pokemon where nr = ?', pokemon):
+    for row in c.execute('select nr, name, catched, infos from pokemon where nr = ?', pokemon):
 
-        pkinfo = [row[0], row[1], row[2]]
+        pkinfo = [row[0], row[1], row[2], row[3]]
         
         #Ermittlung der Location-Information
         locs = []
@@ -83,7 +83,6 @@ def add_loc(pokemon, edition, location):
     inserts = (pokemon, edition, location)
     c.execute('insert into locations (nr, edition, location) values (?,?,?)', inserts)
     
-    
     conn.commit()
     
 def rm_loc(pokemon, edition, location):
@@ -96,7 +95,17 @@ def rm_loc(pokemon, edition, location):
     c.execute('delete from locations where nr=? and edition=? and location=?', inserts)
 
     conn.commit()   
+  
+def add_info(pokemon, info):
+    #holt die nr des pokemon, falls name angegeben
+    if isinstance(pokemon, str) and not pokemon.isdigit():
+        pokemon = get_pknr(pokemon)
     
+    inserts = (info, pokemon)
+    c.execute('update pokemon set infos=? where nr=?', inserts)
+
+    conn.commit()
+  
 def get_pknr(pokemon):
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = pokemon.capitalize()
