@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf -8 -*-
 
 #from gi.repository import Gtk
 import sqlite3
@@ -96,10 +97,13 @@ def rm_info():
     pkdao.rm_info(pokemon)
     
 def set_c():
-    print 'Dummy'
-    
+    print 'Herzlichen Glückwunsch zum Fangerfolg! :)'
+    pokemon = raw_input('Pokemoninformation? (Mehrere durch Kommata trennen) > ')
+    pkdao.set_c(pokemon, 1)
+   
 def uset_c():
-    print 'Dummy'
+    pokemon = raw_input('Pokemoninformation? (Mehrere durch Kommata trennen) > ')
+    pkdao.set_c(pokemon, 0)
     
 def close():
     pkdao.close()

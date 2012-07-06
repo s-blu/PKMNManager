@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf -8 -*-
 
 #from gi.repository import Gtk
 import sqlite3
@@ -107,7 +108,16 @@ def add_info(pokemon, info):
     conn.commit()
   
 def rm_info(pokemon):
-    add_info(pokemon, None)    
+    add_info(pokemon, None) 
+
+def set_c(pokemon, catch):
+    #holt die nr des pokemon, falls name angegeben
+    if isinstance(pokemon, str) and not pokemon.isdigit():
+        pokemon = get_pknr(pokemon)
+    
+    inserts = (catch, pokemon)
+    c.execute('update pokemon set catched=? where nr=?', inserts)
+        
   
 def get_pknr(pokemon):
     if isinstance(pokemon, str) and not pokemon.isdigit():

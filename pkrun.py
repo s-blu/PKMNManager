@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf -8 -*-
 
 #from gi.repository import Gtk
 import sqlite3
@@ -22,7 +23,7 @@ def run():
             print 'addlocation oder addloc fuegt Fundorte zum Pokemon hinzu.'
             print 'removelocation oder rmloc loescht ein spezifischen Fundort wieder.'
             print 'addinfo oder addinformation fuegt eine Notiz/Information zum Pokemon hinzu.'
-            print 'removeinformation oder rminfo loescht die Notiz/Information zum Pokemon. (not_i)'
+            print 'removeinformation oder rminfo loescht die Notiz/Information zum Pokemon.'
             print 'setcatched ct (not i)'
             print 'unsetcatched uct (not i)'
             print 'exit beendet dieses Programm'
