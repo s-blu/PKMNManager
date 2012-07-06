@@ -44,8 +44,8 @@ def printa(arguments):
     arguments = arguments.split(' -')
     arguments = arguments [1:]
     
-    if arguments.len() == 0:
-        dispall = raw_input('Moechten Sie alle Pokemon anzeigen lassen? Y/no')
+    if len(arguments) == 0:
+        dispall = raw_input('Moechten Sie alle Pokemon anzeigen lassen? Y/no > ')
         if dispall == 'no' or dispall == 'n':
             return
     
@@ -54,7 +54,27 @@ def printa(arguments):
     for pk in list:
         print_pokemon(pk)
     
-
+def rm_location():
+    pokemon = raw_input('Pokemoninformation? > ')
+    print_pokemon(pokemon)
+    print 'Spezifizieren Sie bitte den Eintrag der geloescht werden soll.'
+    edition = raw_input('Loeschen: Welche Edition? > ')
+    location = raw_input('Loeschen: Welche Location? > ')
+    pkdao.rm_loc(pokemon, edition, location)
+    print_pokemon(pokemon)
+    
+    morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
+    morerm = morerm.lower()
+    
+    while morerm == 'yes' or morerm == 'y':
+        edition = raw_input('Loeschen: Welche Edition? > ')
+        location = raw_input('Loeschen: Welche Location? > ')
+    
+        pkdao.rm_loc(pokemon, edition, location)
+        print_pokemon(pokemon)
+        morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
+        morerm = morerm.lower()
+    
     
 def close():
     pkdao.close()

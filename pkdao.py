@@ -11,12 +11,9 @@ c = conn.cursor()
 # Das zweite Tupel ist eine Liste, die wiederrum Listen mit edition und location enthaehlt
 def get_pkinfo(pokemon):
 
-    # Falls Name angegeben wurde, wird die Nummer ermittelt
+    #holt die nr des pokemon, falls name angegeben
     if isinstance(pokemon, str) and not pokemon.isdigit():
-        pokemon = pokemon.capitalize()
-        pokemon = (pokemon,)
-        for row_name in c.execute('select nr from pokemon where name = ?', pokemon):
-            pokemon = row_name[0]
+        pokemon = get_pknr(pokemon)
             
             
     pokemon = (pokemon,)
@@ -79,10 +76,9 @@ def get_pk(args):
 #fuegt die edition und location zum pokemon hinzu 
 def add_loc(pokemon, edition, location):
 
+    #holt die nr des pokemon, falls name angegeben
     if isinstance(pokemon, str) and not pokemon.isdigit():
-        pokemon = (pokemon,)
-        for row in c.execute('select nr from pokemon where name = ?', pokemon):
-            pokemon = row[0]
+        pokemon = get_pknr(pokemon)
     
     inserts = (pokemon, edition, location)
     c.execute('insert into locations (nr, edition, location) values (?,?,?)', inserts)
@@ -90,6 +86,24 @@ def add_loc(pokemon, edition, location):
     
     conn.commit()
     
+def rm_loc(pokemon, edition, location):
+    #holt die nr des pokemon, falls name angegeben
+    if isinstance(pokemon, str) and not pokemon.isdigit():
+        pokemon = get_pknr(pokemon)
+        
+
+    inserts = (pokemon, edition, location)  
+    c.execute('delete from locations where nr=? and edition=? and location=?', inserts)
+
+    conn.commit()   
+    
+def get_pknr(pokemon):
+    if isinstance(pokemon, str) and not pokemon.isdigit():
+        pokemon = pokemon.capitalize()
+        pokemon = (pokemon,)
+        for row in c.execute('select nr from pokemon where name = ?', pokemon):
+            return row[0]
+  
 def close():
     conn.commit()
     c.close()

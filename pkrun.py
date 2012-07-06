@@ -20,6 +20,7 @@ def run():
             print '\t -info gibt alle Pokemon mit Info aus'
             print '\t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
             print 'addlocation oder addloc fuegt Fundorte zum Pokemon hinzu.'
+            print 'removelocation oder rmloc loescht ein spezifischen Fundort wieder.'
             print 'exit beendet dieses Programm'
         elif func == 'exit':
             running = False
@@ -29,8 +30,10 @@ def run():
             pkview.print_pokemon(pokem)
         elif 'addloc' in func:
             pkview.add_location()
-        elif 'print' in func or 'pr' in func:
+        elif 'print' in func or 'pr' == func:
             pkview.printa(func)
+        elif 'removeloc' in func or 'rmloc' in func:
+            pkview.rm_location()
         else:
             print 'Tippen sie h oder help oder hilfe fuer eine Erklaerung der Funktionalitaet ein'
             
