@@ -5,6 +5,15 @@
 import sqlite3
 import pkdao
 
+def prp(arguments):
+    arguments = arguments.split(' ')
+    arguments = arguments [1:]
+    if len(arguments) > 0:
+        print_pokemon(arguments[0])
+    else:
+        pokem = raw_input('Welches Pokemon? > ')
+        print_pokemon(pokem)
+
 # Gibt ein, mehrere oder alle Pokemon mitsamt Locationinformation aus.
 def print_pokemon(pokem):
 
@@ -60,12 +69,7 @@ def add_location():
 def printa(arguments):
     arguments = arguments.split(' -')
     arguments = arguments [1:]
-    
-    if len(arguments) == 0:
-        dispall = raw_input('Moechten Sie alle Pokemon anzeigen lassen? Y/no > ')
-        if dispall == 'no' or dispall == 'n':
-            return
-    
+
     list = pkdao.get_pk(arguments)
     
     if len(list) > 100:

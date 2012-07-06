@@ -21,7 +21,7 @@ def run():
             func = raw_input('Was moechten Sie tun? > ')
             
             if func == 'h' or func == "help" or func == 'hilfe':
-                print 'Sie befinden sich im Pokemonmanager V0.001!'
+                print 'Sie befinden sich im Pokemonmanager V0.2.1!'
                 print '"printpokemon" oder "prp" gibt die Daten zum uebergebenen Pokemon aus'
                 print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
                 print '\t -g gibt alle gefangenen Pokemon aus'
@@ -39,9 +39,8 @@ def run():
             elif func == 'exit':
                 running = False
                 pkview.close()
-            elif 'printp' in func or func == 'prp':
-                pokem = raw_input('Welches Pokemon? > ')
-                pkview.print_pokemon(pokem)
+            elif 'printp' in func or 'prp' in func:
+                pkview.prp(func)
             elif 'addloc' in func:
                 pkview.add_location()
             elif 'print' in func or 'pr' in func:
