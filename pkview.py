@@ -91,7 +91,9 @@ def add_info():
     pkdao.add_info(pokemon, info)
     
 def rm_info():
-    print 'Dummy'
+    pokemon = raw_input('Von welchem Pokemon wollen Sie die Info loeschen? > ')
+    
+    pkdao.rm_info(pokemon)
     
 def set_c():
     print 'Dummy'

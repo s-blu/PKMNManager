@@ -106,6 +106,9 @@ def add_info(pokemon, info):
 
     conn.commit()
   
+def rm_info(pokemon):
+    add_info(pokemon, None)    
+  
 def get_pknr(pokemon):
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = pokemon.capitalize()
