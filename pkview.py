@@ -38,7 +38,8 @@ def add_location():
         print_pokemon(pokemon)
         moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
         moreinput = moreinput.lower()
-        
+  
+#gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
 def printa(arguments):
     arguments = arguments.split(' -')
     arguments = arguments [1:]
