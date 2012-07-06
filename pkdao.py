@@ -15,8 +15,11 @@ def get_pkinfo(pokemon):
     #holt die nr des pokemon, falls name angegeben
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
-            
-            
+        
+    
+    pkinfo = []
+    locs = []   
+    
     pokemon = (pokemon,)
     #Ermittung der Pokemoninformationen
     for row in c.execute('select nr, name, catched, infos from pokemon where nr = ?', pokemon):
@@ -24,12 +27,25 @@ def get_pkinfo(pokemon):
         pkinfo = [row[0], row[1], row[2], row[3]]
         
         #Ermittlung der Location-Information
-        locs = []
         nummer = (row[0],)
         for row2 in c.execute('select edition, location from locations where nr = ?', nummer):
             locs.append([row2[0], row2[1]])
                   
     return pkinfo, locs
+    
+def valid_pk(pokemon):
+    #holt die nr des pokemon, falls name angegeben
+    if isinstance(pokemon, str) and not pokemon.isdigit():
+        pokemon = get_pknr(pokemon)
+        if pokemon == False:
+            return False
+    
+    pokemon = (pokemon,)
+    #Ermittung der Pokemoninformationen
+    for row in c.execute('select nr from pokemon where nr = ?', pokemon):
+        return True
+    
+    return False
     
 def get_pk(args):
     g = ''
@@ -125,6 +141,8 @@ def get_pknr(pokemon):
         pokemon = (pokemon,)
         for row in c.execute('select nr from pokemon where name = ?', pokemon):
             return row[0]
+            
+    return False
   
 def close():
     conn.commit()

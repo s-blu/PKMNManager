@@ -9,6 +9,10 @@ import pkdao
 def print_pokemon(pokem):
 
     pkinfo, locs = pkdao.get_pkinfo(pokem)
+    
+    if len(pkinfo) == 0:
+        print "Ungueltiges Pokemon"
+        return
 
     catch = "nicht gefangen."
     if pkinfo[2] != 0:
@@ -31,6 +35,9 @@ def print_pokemon(pokem):
 def add_location():
 
     pokemon = raw_input('Pokemoninformation? > ')
+    if not pkdao.valid_pk(pokemon):
+        print "Ungueltiges Pokemon"
+        return
     edition = raw_input('Welche Edition? > ')
     location = raw_input('Welche Location? > ')
     
@@ -61,11 +68,19 @@ def printa(arguments):
     
     list = pkdao.get_pk(arguments)
     
+    if len(list) > 100:
+        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)))
+        if dispall == 'no' or dispall == 'n':
+            return
+            
     for pk in list:
         print_pokemon(pk)
     
 def rm_location():
     pokemon = raw_input('Pokemoninformation? > ')
+    if not pkdao.valid_pk(pokemon):
+        print "Ungueltiges Pokemon"
+        return
     print_pokemon(pokemon)
     print 'Spezifizieren Sie bitte den Eintrag der geloescht werden soll.'
     edition = raw_input('Loeschen: Welche Edition? > ')
@@ -87,23 +102,30 @@ def rm_location():
 
 def add_info():
     pokemon = raw_input('Pokemoninformation? > ')
+    if not pkdao.valid_pk(pokemon):
+        print "Ungueltiges Pokemon"
+        return
     info = raw_input('Info? > ')
     
     pkdao.add_info(pokemon, info)
     
 def rm_info():
     pokemon = raw_input('Von welchem Pokemon wollen Sie die Info loeschen? > ')
-    
+    if not pkdao.valid_pk(pokemon):
+        print "Ungueltiges Pokemon"
+        return
     pkdao.rm_info(pokemon)
     
 def set_c():
-    print 'Herzlichen Glückwunsch zum Fangerfolg! :)'
+    print 'Herzlichen Glueckwunsch zum Fangerfolg! :)'
     pokemon = raw_input('Pokemoninformation? (Mehrere durch Kommata trennen) > ')
     pkdao.set_c(pokemon, 1)
+    print_pokemon(pokemon)
    
 def uset_c():
     pokemon = raw_input('Pokemoninformation? (Mehrere durch Kommata trennen) > ')
     pkdao.set_c(pokemon, 0)
+    print_pokemon(pokemon)
     
 def close():
     pkdao.close()
