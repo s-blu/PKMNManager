@@ -7,7 +7,6 @@ conn = sqlite3.connect('pokedex.db')
 c = conn.cursor()
 
 def print_pokemon(pokemon):
-    print 'blablablub'
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = pokemon.capitalize()
         pokemon = (pokemon,)
