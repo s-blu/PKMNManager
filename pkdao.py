@@ -29,7 +29,7 @@ def get_pkinfo(pokemon):
         locs = []
         nummer = (row[0],)
         for row2 in c.execute('select edition, location from locations where nr = ?', nummer):
-            locs.append([row2[0], row2[1]]
+            locs.append([row2[0], row2[1]])
                   
     return pkinfo, locs
  

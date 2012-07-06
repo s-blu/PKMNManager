@@ -12,15 +12,23 @@ def run():
         
         if func == 'h' or func == "help" or func == 'hilfe':
             print 'Sie befinden sich im Pokemonmanager V0.001!'
-            print 'print_pokemon oder prp gibt die Daten zur uebergebenen pokemonnr aus'
-            print 'add_location der addloc fuegt die location in der uebergebenen edition zum pokemon hinzu.'
+            print 'printpokemon oder prp gibt die Daten zum uebergebenen Pokemon aus'
+            print 'print oder pr gibt die Daten gemaess der Parameter aus aus'
+            print '\t -all gibt alle Pokemon aus'
+            print '\t -g gibt alle gefangenen Pokemon aus'
+            print '\t -ung gibt alle ungefangenen Pokemon aus'
+            print '\t -ort gibt alle Pokemon mit Fundorten aus'
+            print '\t -info gibt alle Pokemon mit Info aus'
+            print '\t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
+            print 'addlocation oder addloc fuegt Fundorte zum Pokemon hinzu.'
             print 'exit beendet dieses Programm'
         elif func == 'exit':
             running = False
             pkview.close()
-        elif 'print_pokemon' in func or func == 'prp':
-            pkview.print_pokemon()
-        elif 'add_location' in func or func == 'addloc':
+        elif 'print' in func or func == 'prp':
+            pokem = raw_input('Welches Pokemon? > ')
+            pkview.print_pokemon(pokem)
+        elif 'addlocation' in func or func == 'addloc':
             pkview.add_location()
         else:
             print 'Tippen sie h oder help oder hilfe fuer eine Erklaerung der Funktionalitaet ein'
