@@ -5,10 +5,7 @@
 import sqlite3
 import pkview
 import sys
-<<<<<<< HEAD
-=======
 
->>>>>>> features
 
 def __main():
     run()
@@ -17,7 +14,7 @@ def run():
 
     running = True
     print '====================================================='
-    print 'Willkommen im Pokemonmanager V0.3!'
+    print 'Willkommen im Pokemonmanager V{0}!'.format(pkview.ver)
     print 'prp/print Ausgabe der Pokemon'
     print 'addloc/info rmloc/info Aendern von Fundorten und Info'
     print 'exit Programm beenden'
@@ -30,7 +27,7 @@ def run():
             func = raw_input('>> Was moechten Sie tun? > ')
             
             if func == 'h' or func == "help" or func == 'hilfe':
-                print 'Sie befinden sich im Pokemonmanager V0.3!'
+                print 'Sie befinden sich im Pokemonmanager V{0}!'.format(pkview.ver)
                 print '- - -'
                 print '"printpokemon" oder "prp" gibt die Daten zum uebergebenen Pokemon aus'
                 print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
