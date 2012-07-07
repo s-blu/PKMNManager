@@ -6,6 +6,8 @@ import sqlite3
 import pkdao
 import re
 
+ver = 0.3
+
 #Validiert die Existenz des Pokemon. Ist es existent, wird der Name ohne Leerzeichen und mit grossen Anfangsbuchstaben
 # (Datenbankkonform) zurueckgegeben
 def valid_pk(pk):
@@ -134,13 +136,9 @@ def printa(arguments):
         if arg not in known_args:
             print "Unbekannter Parameter '{0}'".format(arg)
             return
-            
-            
 
     list = pkdao.get_pk(arguments)
-    
-    
-    
+
     if len(list) > 100:
         dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)))
         if dispall == 'no' or dispall == 'n':
@@ -260,7 +258,7 @@ def set_c(pokem):
             pkdao.set_c(pokemon, 1)
             print_pokemon(pokemon)
             
-# Ermoeglicht den Aufruf von set_c mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
+# Ermoeglicht den Aufruf von uset_c mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
 def uct(arguments):
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
@@ -269,7 +267,8 @@ def uct(arguments):
     else:
         pokem = raw_input('Pokemonnr oder -name? > ')
         uset_c(pokem)  
-        
+    
+#Markiert uebergebene Pokemon als ungefangen
 def uset_c(pokem):
     pkms = create_list(pokem)
     
@@ -279,6 +278,16 @@ def uset_c(pokem):
         else:
             pkdao.set_c(pokemon, 0)
             print_pokemon(pokemon)
+            
+def credit():
+    print '- - - Credits - - -'
+    print 'Pokemonmanager V{0}'.format(ver)
+    print 'Dient zur Unterstuetzung beim Komplettieren des eigenen Pokedex'
+    print 'Dies ist kein Pokedex! Sondern ein Fundort/Info/Gedangen-nichtgefangen Manager'
+    print 'Neuste unterstuetzte Pokemonversion: schwarz/weiss'
+    print 'Geschrieben von Sam B. <sam(at)s-blu.de>'
+    print 'Anfang Juli 2012 gestartetes Projekt in Python'
+    print '- - - - - - - - -'
     
 def close():
     pkdao.close()

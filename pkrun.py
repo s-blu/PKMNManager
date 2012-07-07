@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf -8 -*-
 
-#from gi.repository import Gtk
+
 import sqlite3
 import pkview
-import sys
-import codecs
 
-sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
 
+def __main():
+    run()
+    
 def run():
 
     running = True
@@ -41,6 +41,7 @@ def run():
                 print '"setcatched" oder "ct" markiert ein oder mehrere Pokemon als gefangen.'
                 print '"unsetcatched" oder "uct" markiert ein oder mehrere Pokemon als nicht gefangen.'
                 print '"exit" beendet dieses Programm'
+                print '"credits" zeigt Informationen ueber dieses Programm an'
                 print '- - -'
                 print 'Mehrfachangaben durch , trennen oder Ranges angeben, z.B. 3-77'
                 print 'Pokemon koennen nach Eingabe des Befehls oder direkt hinter den Befehl geschrieben werden'
@@ -64,6 +65,8 @@ def run():
                 pkview.ct(func)
             elif 'unsetcatch' in func or 'uct' == func:
                 pkview.uct(func)
+            elif 'credit' in func:
+                pkview.credit()
             else:
                 print 'Tippen sie "h"/"help"/"hilfe" fuer eine Erklaerung der Funktionalitaet ein'
     except KeyboardInterrupt:
