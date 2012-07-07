@@ -64,6 +64,28 @@ def print_pokemon(pokem):
     elif isinstance(pokem, int):
         printer(pokem)
   
+#Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
+def printa(arguments):
+    arguments = arguments.split(' -')
+    arguments = arguments [1:]
+    
+    known_args = pkdao.args_get_pk()
+    
+    for arg in arguments:
+        if arg not in known_args:
+            print "Unbekannter Parameter '{0}'".format(arg)
+            return
+
+    list = pkdao.get_pk(arguments)
+
+    if len(list) > 100:
+        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)))
+        if dispall == 'no' or dispall == 'n':
+            return
+            
+    for pk in list:
+        print_pokemon(pk)
+        
 # Macht die Ausgabe eines Pokemon. Wird nie direkt ueber das runmodul aufgerufen.
 def printer(pokemon):
     pkinfo, locs = pkdao.get_pkinfo(pokemon)
@@ -127,27 +149,7 @@ def add_location(pokem):
             moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
             moreinput = moreinput.lower()
   
-#Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
-def printa(arguments):
-    arguments = arguments.split(' -')
-    arguments = arguments [1:]
-    
-    known_args = pkdao.args_get_pk()
-    
-    for arg in arguments:
-        if arg not in known_args:
-            print "Unbekannter Parameter '{0}'".format(arg)
-            return
 
-    list = pkdao.get_pk(arguments)
-
-    if len(list) > 100:
-        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)))
-        if dispall == 'no' or dispall == 'n':
-            return
-            
-    for pk in list:
-        print_pokemon(pk)
     
 # Ermoeglicht den Aufruf von rm_location mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
 def rmloc(arguments):
@@ -170,7 +172,11 @@ def rm_location(pokem):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
             invalidpk += 1
         else:
-            print_pokemon(pokemon)
+            if pkdao.have_locs(pokemon) == 0:
+                print "Fuer Pokemon '{0}' existieren keine Locationangaben".format(pokemon)
+                invalidpk += 1
+            else:
+                print_pokemon(pokemon)
     
     if invalidpk < len(pkms):
         rmall = raw_input('Sollen alle Eintraege geloescht werden? yes/N > ')

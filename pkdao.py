@@ -117,6 +117,18 @@ def rm_loc(pokemon, edition, location):
     c.execute('delete from locations where nr=? and edition=? and location=?', inserts)
 
     conn.commit()
+    
+def have_locs(pokemon):
+    locs = 0
+    #holt die nr des pokemon, falls name angegeben
+    if isinstance(pokemon, str) and not pokemon.isdigit():
+        pokemon = get_pknr(pokemon)
+    pokemon = (pokemon,)
+    for row in c.execute('select * from locations where nr = ?', pokemon):
+        locs += 1
+        
+    return locs
+        
 
 def rm_all_loc(pokemon):
     #holt die nr des pokemon, falls name angegeben

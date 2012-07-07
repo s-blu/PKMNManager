@@ -68,6 +68,10 @@ def run():
                 pkview.uct(func)
             elif 'credit' in func:
                 pkview.credit()
+            elif 'clear' in func:
+                print "\33[2J"
+            elif 'flausch' in func:    
+                print "Aaaaw! *flausch* <3"
             else:
                 print 'Tippen sie "h"/"help"/"hilfe" fuer eine Erklaerung der Funktionalitaet ein'
     except KeyboardInterrupt:
