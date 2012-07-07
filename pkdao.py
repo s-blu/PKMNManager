@@ -111,7 +111,18 @@ def rm_loc(pokemon, edition, location):
     inserts = (pokemon, edition, location)  
     c.execute('delete from locations where nr=? and edition=? and location=?', inserts)
 
-    conn.commit()   
+    conn.commit()
+
+def rm_all_loc(pokemon):
+    #holt die nr des pokemon, falls name angegeben
+    if isinstance(pokemon, str) and not pokemon.isdigit():
+        pokemon = get_pknr(pokemon)
+        
+
+    inserts = (pokemon,)  
+    c.execute('delete from locations where nr=?', inserts)
+
+    conn.commit()
   
 def add_info(pokemon, info):
     #holt die nr des pokemon, falls name angegeben
