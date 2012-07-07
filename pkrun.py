@@ -10,8 +10,6 @@ import codecs
 sys.stdout = codecs.getwriter('UTF-8')(sys.stdout)
 
 def run():
-    
-
 
     running = True
     print '====================================================='
@@ -28,6 +26,7 @@ def run():
             
             if func == 'h' or func == "help" or func == 'hilfe':
                 print 'Sie befinden sich im Pokemonmanager V0.2.1!'
+                print '- - -'
                 print '"printpokemon" oder "prp" gibt die Daten zum uebergebenen Pokemon aus'
                 print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
                 print '\t -g gibt alle gefangenen Pokemon aus'
@@ -41,28 +40,30 @@ def run():
                 print '"removeinformation" oder "rminfo" loescht die Notiz/Information zum Pokemon.'
                 print '"setcatched" oder "ct" markiert ein oder mehrere Pokemon als gefangen.'
                 print '"unsetcatched" oder "uct" markiert ein oder mehrere Pokemon als nicht gefangen.'
-                print 'Mehrfachangaben sind bei allen Befehlen moeglich - dazu Pokemonnamen oder Nummern durch , trennen'
-                print '\t Alternativ Ranges angeben, bspw. 3-77 (not impl)'
                 print '"exit" beendet dieses Programm'
+                print '- - -'
+                print 'Mehrfachangaben durch , trennen oder Ranges angeben, z.B. 3-77'
+                print 'Pokemon koennen nach Eingabe des Befehls oder direkt hinter den Befehl geschrieben werden'
+                
             elif func == 'exit':
                 running = False
                 pkview.close()
             elif 'printp' in func or 'prp' in func:
                 pkview.prp(func)
             elif 'addloc' in func:
-                pkview.add_location()
+                pkview.addloc(func)
             elif 'print' in func or 'pr' in func:
                 pkview.printa(func)
             elif 'removeloc' in func or 'rmloc' in func:
-                pkview.rm_location()
+                pkview.rmloc(func)
             elif 'addinfo' in func:
-                pkview.add_info()
+                pkview.addinf(func)
             elif 'removeinfo' in func or 'rminfo' == func:
-                pkview.rm_info()
+                pkview.rminf(func)
             elif 'setcatch' in func or 'ct' == func:
-                pkview.set_c()
+                pkview.ct(func)
             elif 'unsetcatch' in func or 'uct' == func:
-                pkview.uset_c()
+                pkview.uct(func)
             else:
                 print 'Tippen sie "h"/"help"/"hilfe" fuer eine Erklaerung der Funktionalitaet ein'
     except KeyboardInterrupt:
