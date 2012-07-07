@@ -82,7 +82,7 @@ def printa(arguments):
     list = pkdao.get_pk(arguments)
 
     if len(list) > 100:
-        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)))
+        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)+1))
         if dispall == 'no' or dispall == 'n':
             return
             
