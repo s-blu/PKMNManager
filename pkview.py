@@ -127,8 +127,19 @@ def add_location(pokem):
 def printa(arguments):
     arguments = arguments.split(' -')
     arguments = arguments [1:]
+    
+    known_args = pkdao.args_get_pk()
+    
+    for arg in arguments:
+        if arg not in known_args:
+            print "Unbekannter Parameter '{0}'".format(arg)
+            return
+            
+            
 
     list = pkdao.get_pk(arguments)
+    
+    
     
     if len(list) > 100:
         dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)))

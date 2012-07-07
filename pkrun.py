@@ -13,7 +13,7 @@ def run():
 
     running = True
     print '====================================================='
-    print 'Willkommen im Pokemonmanager V0.2.1!'
+    print 'Willkommen im Pokemonmanager V0.3!'
     print 'prp/print Ausgabe der Pokemon'
     print 'addloc/info rmloc/info Aendern von Fundorten und Info'
     print 'exit beendet das Programm'
@@ -25,7 +25,7 @@ def run():
             func = raw_input('Was moechten Sie tun? > ')
             
             if func == 'h' or func == "help" or func == 'hilfe':
-                print 'Sie befinden sich im Pokemonmanager V0.2.1!'
+                print 'Sie befinden sich im Pokemonmanager V0.3!'
                 print '- - -'
                 print '"printpokemon" oder "prp" gibt die Daten zum uebergebenen Pokemon aus'
                 print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
