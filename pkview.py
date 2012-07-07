@@ -69,12 +69,10 @@ def print_pokemon(pokem):
 def printa(arguments):
     arguments = arguments.split('-')
     arguments = arguments [1:]
-    
-    known_args = pkdao.args_get_pk()
-    
+
     for arg in arguments:
         arg = arg.strip()
-        if arg not in known_args:
+        if not pkdao.get_pk_is_known_arg(arg):
             print "Unbekannter Parameter '{0}'".format(arg)
             return
 
@@ -92,7 +90,7 @@ def printa(arguments):
 def printer(pokemon):
     pkinfo, locs = pkdao.get_pkinfo(pokemon)
             
-    catch = "( )"
+    catch = "n. gef."
     if pkinfo[2] != 0:
         catch = "gefangen!"
     

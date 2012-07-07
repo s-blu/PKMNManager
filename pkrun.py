@@ -19,11 +19,12 @@ def run():
     print 'addloc/info rmloc/info Aendern von Fundorten und Info'
     print 'exit Programm beenden'
     print 'help ausfuehrliche Hilfe'  
+    print 'Bitte keine Umlaute benutzen.'
     print '====================================================='
     
     try:
         while(running):
-            func = raw_input('Was moechten Sie tun? > ')
+            func = raw_input('>> Was moechten Sie tun? > ')
             
             if func == 'h' or func == "help" or func == 'hilfe':
                 print 'Sie befinden sich im Pokemonmanager V0.3!'
@@ -32,8 +33,11 @@ def run():
                 print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
                 print '\t -g gibt alle gefangenen Pokemon aus'
                 print '\t -ung gibt alle ungefangenen Pokemon aus'
-                print '\t -ort gibt alle Pokemon mit Fundorten aus'
+                print '\t -ort oder -loc gibt alle Pokemon mit Fundorten aus'
                 print '\t -info gibt alle Pokemon mit Info aus'
+                print '\t -ed gibt alle Pokemon mit angegeber Edition aus, z.B.: -edHG'
+                print '\t -loc gibt alle Pokemon mit angegebem Fundort (falls angegeben, sonst alle) aus, z.B.: -locRoute 24'
+                print '\t -rng gibt alle Pokemon in der angegebenen Zahlenrang aus. Start und Endwert werden durch "to" getrennt, z.B.: -rng1to150'
                 print '\t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
                 print '"addlocation" oder "addloc" fuegt Fundorte zum Pokemon hinzu.'
                 print '"removelocation" oder "rmloc" loescht ein spezifischen Fundort wieder.'
