@@ -47,6 +47,10 @@ def valid_pk(pokemon):
     
     return False
     
+def args_get_pk():
+    args = ['g', 'ung', 'ort', 'info', 'r']   
+    return args
+    
 def get_pk(args):
     g = ''
     ung = ''
@@ -62,6 +66,7 @@ def get_pk(args):
             ort = ' join locations on pokemon. nr = locations.nr'
         elif arg == 'info':
             info = ' infos is not null '
+            
             
     if g != '' and ung != '':
         g = ''
