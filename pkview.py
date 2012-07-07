@@ -49,7 +49,10 @@ def prp(arguments):
             print_pokemon(arguments[0])
     else:
         pokem = raw_input('Welches Pokemon? > ')
-        print_pokemon(pokem)
+        if pokem == '' or pokem == 'all':
+            printa('')
+        else:
+            print_pokemon(pokem)
 
 # Gibt ein, mehrere oder alle Pokemon mitsamt Locationinformation aus.
 def print_pokemon(pokem):
@@ -297,7 +300,7 @@ def credit():
     print 'Neuste unterstuetzte Pokemonversion: schwarz/weiss'
     print 'Geschrieben von Sam B. <sam(at)s-blu.de>'
     print 'Anfang Juli 2012 gestartetes Projekt in Python'
-    print 'Ein Flausch an Tsurai fuers Testen <3'
+    print 'Ein sparkling Flausch an Tsurai fuers Testen <3'
     print '- - - - - - - - -'
     
 def close():

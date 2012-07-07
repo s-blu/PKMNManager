@@ -4,7 +4,7 @@
 #from gi.repository import Gtk
 import sqlite3
 
-conn = sqlite3.connect('../db/pokedex.db')
+conn = sqlite3.connect('../db/pkmmanager.db')
 c = conn.cursor()
 
 

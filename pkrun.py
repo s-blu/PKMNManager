@@ -27,10 +27,11 @@ def run():
             func = raw_input('>> Was moechten Sie tun? > ')
             
             if func == 'h' or func == "help" or func == 'hilfe':
+                print '================================================'
                 print 'Sie befinden sich im Pokemonmanager V{0}!'.format(pkview.ver)
                 print '- - -'
                 print '"printpokemon" oder "prp" gibt die Daten zum uebergebenen Pokemon aus'
-                print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Ohne Parameter werden alle Pokemon ausgegeben.'
+                print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Fuer alle Pokemon bei Nachfrage Enter druecken.'
                 print '\t -g gibt alle gefangenen Pokemon aus'
                 print '\t -ung gibt alle ungefangenen Pokemon aus'
                 print '\t -ort oder -loc gibt alle Pokemon mit Fundorten aus'
@@ -50,6 +51,7 @@ def run():
                 print '- - -'
                 print 'Mehrfachangaben durch , trennen oder Ranges angeben, z.B. 3-77'
                 print 'Pokemon koennen nach Eingabe des Befehls oder direkt hinter den Befehl geschrieben werden'
+                print '================================================'
                 
             elif func == 'exit':
                 running = False
