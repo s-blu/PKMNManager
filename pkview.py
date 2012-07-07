@@ -20,10 +20,11 @@ def valid_pk(pk):
         
 def create_list(pks):
 
+    pkms = []
+
     if re.match('[0-9]+[-][0-9]+', pks) != None:
         start, sep, end = pks.partition('-')
         pkms = range(int(start), int(end)+1)
-        print 'Debug: {0}'.format(pkms)
     else:
         pkms = pks.split(',')
         
@@ -100,30 +101,31 @@ def add_location(pokem):
     location = raw_input('Welche Location? > ')
     
     pkms = create_list(pokem)
-    
+    invalidpk = 0
     for pokemon in pkms:
         if not pkdao.valid_pk(pokemon):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
+            invalidpk += 1
         else:
             pkdao.add_loc(pokemon, edition, location)
             
             print_pokemon(pokemon)
-            
-    moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
-    moreinput = moreinput.lower()
-    
-    while moreinput == 'yes' or moreinput == 'y':
-        edition = raw_input('Welche Edition? > ')
-        loc = raw_input('Welche Location? > ')
-    
-        for pokemon in pkms:
-            if not pkdao.valid_pk(pokemon):
-                print "Ungueltiges Pokemon '{0}'".format(pokemon)
-            else:
-                pkdao.add_loc(pokemon, edition, loc)
-                print_pokemon(pokemon)
+    if invalidpk < len(pkms):        
         moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
         moreinput = moreinput.lower()
+        
+        while moreinput == 'yes' or moreinput == 'y':
+            edition = raw_input('Welche Edition? > ')
+            loc = raw_input('Welche Location? > ')
+        
+            for pokemon in pkms:
+                if not pkdao.valid_pk(pokemon):
+                    print "Ungueltiges Pokemon '{0}'".format(pokemon)
+                else:
+                    pkdao.add_loc(pokemon, edition, loc)
+                    print_pokemon(pokemon)
+            moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
+            moreinput = moreinput.lower()
   
 #Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
 def printa(arguments):
@@ -162,39 +164,41 @@ def rm_location(pokem):
     
     pkms = create_list(pokem)
     
-
+    invalidpk = 0
     for pokemon in pkms:
         if not pkdao.valid_pk(pokemon):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
+            invalidpk += 1
         else:
             print_pokemon(pokemon)
+    
+    if invalidpk < len(pkms):
+        rmall = raw_input('Sollen alle Eintraege geloescht werden? yes/N > ')
+        rmall = rmall.lower()
+        if rmall == 'yes' or rmall == 'y':
+            for pokemon in pkms:
+                pkdao.rm_all_loc(pokemon)
+                print_pokemon(pokemon)
             
-    rmall = raw_input('Sollen alle Eintraege geloescht werden? yes/N > ')
-    rmall = rmall.lower()
-    if rmall == 'yes' or rmall == 'y':
-        for pokemon in pkms:
-            pkdao.rm_all_loc(pokemon)
-            print_pokemon(pokemon)
-        
-    else:
-        print 'Spezifizieren Sie bitte den Eintrag der geloescht werden soll.'
-        edition = raw_input('Loeschen: Welche Edition? > ')
-        location = raw_input('Loeschen: Welche Location? > ')
-        for pokemon in pkms:
-            pkdao.rm_loc(pokemon, edition, location)
-            print_pokemon(pokemon)
-                      
-        morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
-        morerm = morerm.lower()
-        
-        while morerm == 'yes' or morerm == 'y':
+        else:
+            print 'Spezifizieren Sie bitte den Eintrag der geloescht werden soll.'
             edition = raw_input('Loeschen: Welche Edition? > ')
             location = raw_input('Loeschen: Welche Location? > ')
             for pokemon in pkms:
                 pkdao.rm_loc(pokemon, edition, location)
                 print_pokemon(pokemon)
+                          
             morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
-            morerm = morerm.lower()#
+            morerm = morerm.lower()
+            
+            while morerm == 'yes' or morerm == 'y':
+                edition = raw_input('Loeschen: Welche Edition? > ')
+                location = raw_input('Loeschen: Welche Location? > ')
+                for pokemon in pkms:
+                    pkdao.rm_loc(pokemon, edition, location)
+                    print_pokemon(pokemon)
+                morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
+                morerm = morerm.lower()
             
 # Ermoeglicht den Aufruf von add_info mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
 def addinf(arguments):

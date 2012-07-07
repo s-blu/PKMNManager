@@ -4,6 +4,7 @@
 
 import sqlite3
 import pkview
+import sys
 
 
 def __main():
