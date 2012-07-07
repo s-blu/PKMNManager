@@ -40,12 +40,13 @@ def create_list(pks):
     
 # Ermoeglicht den Aufruf von print_pokemon mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.
 def prp(arguments):
-    if  arguments == 'exit':
-        return
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
     if len(arguments) > 0:
-        print_pokemon(arguments[0])
+        if arguments[0].startswith('-'):
+            printa(arguments[0])
+        else:
+            print_pokemon(arguments[0])
     else:
         pokem = raw_input('Welches Pokemon? > ')
         print_pokemon(pokem)
@@ -66,12 +67,13 @@ def print_pokemon(pokem):
   
 #Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
 def printa(arguments):
-    arguments = arguments.split(' -')
+    arguments = arguments.split('-')
     arguments = arguments [1:]
     
     known_args = pkdao.args_get_pk()
     
     for arg in arguments:
+        arg = arg.strip()
         if arg not in known_args:
             print "Unbekannter Parameter '{0}'".format(arg)
             return
@@ -297,6 +299,7 @@ def credit():
     print 'Neuste unterstuetzte Pokemonversion: schwarz/weiss'
     print 'Geschrieben von Sam B. <sam(at)s-blu.de>'
     print 'Anfang Juli 2012 gestartetes Projekt in Python'
+    print 'Ein Flausch an Tsurai fuers Testen <3'
     print '- - - - - - - - -'
     
 def close():

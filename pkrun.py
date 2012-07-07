@@ -17,8 +17,8 @@ def run():
     print 'Willkommen im Pokemonmanager V0.3!'
     print 'prp/print Ausgabe der Pokemon'
     print 'addloc/info rmloc/info Aendern von Fundorten und Info'
-    print 'exit beendet das Programm'
-    print 'help bringt Sie zur ausfuehrlichen Hilfe.'  
+    print 'exit Programm beenden'
+    print 'help ausfuehrliche Hilfe'  
     print '====================================================='
     
     try:
@@ -50,12 +50,10 @@ def run():
             elif func == 'exit':
                 running = False
                 pkview.close()
-            elif 'printp' in func or 'prp' in func:
+            elif 'print' in func or 'pr' in func:
                 pkview.prp(func)
             elif 'addloc' in func:
                 pkview.addloc(func)
-            elif 'print' in func or 'pr' in func:
-                pkview.printa(func)
             elif 'removeloc' in func or 'rmloc' in func:
                 pkview.rmloc(func)
             elif 'addinfo' in func:
