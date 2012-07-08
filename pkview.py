@@ -80,7 +80,7 @@ def printa(arguments):
             return
 
     list = pkdao.get_pk(arguments)
-
+    
     if len(list) > 100:
         dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)+1))
         if dispall == 'no' or dispall == 'n':
@@ -93,7 +93,7 @@ def printa(arguments):
 def printer(pokemon):
     pkinfo, locs = pkdao.get_pkinfo(pokemon)
             
-    catch = "n. gef."
+    catch = " - "
     if pkinfo[2] != 0:
         catch = "gefangen!"
     
@@ -292,11 +292,14 @@ def uset_c(pokem):
             pkdao.set_c(pokemon, 0)
             print_pokemon(pokemon)
             
+            
+def add_pk(nr, name):
+    pkdao.add_pk(nr, name)
 def credit():
     print '- - - Credits - - -'
     print 'Pokemonmanager V{0}'.format(ver)
     print 'Dient zur Unterstuetzung beim Komplettieren des eigenen Pokedex'
-    print 'Dies ist kein Pokedex! Sondern ein Fundort/Info/Gedangen-nichtgefangen Manager'
+    print 'Dies ist kein Pokedex! Sondern ein Fundort/Info/Gefangen-nichtgefangen Manager'
     print 'Neuste unterstuetzte Pokemonversion: schwarz/weiss'
     print 'Geschrieben von Sam B. <sam(at)s-blu.de>'
     print 'Anfang Juli 2012 gestartetes Projekt in Python'

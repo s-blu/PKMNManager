@@ -75,8 +75,11 @@ def get_pk(args):
     rng = ''
     ed = ''
     loc = ''
+    
+    
 
     for arg in args:
+        arg = arg.strip()
         if arg == 'g':
             g = ' catched = 1 '
         elif arg == 'ung':
@@ -100,8 +103,7 @@ def get_pk(args):
             arg = arg.lstrip('ort')
             arg = arg.strip()
             loc = " locations.location like '%{0}%' ".format(arg)
-            
-            
+    
     if g != '' and ung != '':
         g = ''
         ung = ''
@@ -146,11 +148,12 @@ def get_pk(args):
             ad = True
             
     exc += ' order by pokemon.nr'
-    
-    result = set()
+     
+    result = []
     for row in c.execute(exc):  
-        result.add(row[0])
-        
+        if row[0] not in result:
+            result.append(row[0])
+         
     return result
  
 #fuegt die edition und location zum pokemon hinzu 
@@ -232,7 +235,14 @@ def get_pknr(pokemon):
             return row[0]
             
     return False
-  
+
+# Debug. Zum Aktivieren "add_pk" eingeben, enter "add_pk", nr und name    
+def add_pk(nr, name):
+    inserts = (nr, name)
+    c.execute('insert into pokemon (nr, name) values (?,?)', inserts)
+        
+    conn.commit()
+    
 def close():
     conn.commit()
     c.close()

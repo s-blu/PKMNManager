@@ -24,7 +24,7 @@ def run():
     
     try:
         while(running):
-            func = raw_input('>> Was moechten Sie tun? > ')
+            func = raw_input(' >> Was moechten Sie tun? > ')
             
             if func == 'h' or func == "help" or func == 'hilfe':
                 print '================================================'
@@ -64,18 +64,24 @@ def run():
                 pkview.rmloc(func)
             elif 'addinfo' in func:
                 pkview.addinf(func)
-            elif 'removeinfo' in func or 'rminfo' == func:
+            elif 'removeinfo' in func or 'rminfo' in func:
                 pkview.rminf(func)
-            elif 'setcatch' in func or 'ct' == func:
-                pkview.ct(func)
-            elif 'unsetcatch' in func or 'uct' == func:
+            elif 'unsetcatch' in func or 'uct' in func:
                 pkview.uct(func)
+            elif 'setcatch' in func or 'ct'in func:
+                pkview.ct(func)
             elif 'credit' in func:
                 pkview.credit()
             elif 'clear' in func:
                 print "\33[2J"
             elif 'flausch' in func:    
                 print "Aaaaw! *flausch* <3"
+            elif 'add_pk' == func:
+                nachfr = raw_input('>>')
+                if nachfr == 'add_pk':
+                    nr = raw_input('nr? > ')
+                    name = raw_input('name? > ')
+                    pkview.add_pk(nr, name)
             else:
                 print 'Tippen sie "h"/"help"/"hilfe" fuer eine Erklaerung der Funktionalitaet ein'
     except KeyboardInterrupt:
