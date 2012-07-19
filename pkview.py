@@ -93,7 +93,7 @@ def printa(arguments):
 def printer(pokemon):
     pkinfo, locs = pkdao.get_pkinfo(pokemon)
             
-    catch = " - "
+    catch = " ( ) "
     if pkinfo[2] != 0:
         catch = "gefangen!"
     
