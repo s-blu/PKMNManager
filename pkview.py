@@ -57,6 +57,8 @@ def create_list(pks):
             pk = pk.capitalize()
             
             pkms[i] = pk
+    elif re.match('[0-9]+', pks) != None:
+        pkms.append(pks)
     else:
         pkms = pkdao.get_pk_by_name(pks)
         
