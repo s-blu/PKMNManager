@@ -35,9 +35,19 @@ def create_list(pks):
 
     pkms = []
 
-    if re.match('[0-9]+[-][0-9]+', pks) != None:
+    if re.match('[\w]+[-][\w]+', pks) != None:
         start, sep, end = pks.partition('-')
-        pkms = range(int(start), int(end)+1)
+        if re.match('[0-9]+[-][0-9]+', pks) != None:
+            pkms = range(int(start), int(end)+1)
+        else:
+            if not pkdao.valid_pk(start):
+                print "Ungueltiges Pokemon '{0}'".format(start)
+            elif not pkdao.valid_pk(start):
+                print "Ungueltiges Pokemon '{0}'".format(end)
+            else:
+                start = pkdao.get_pknr(start)
+                end = pkdao.get_pknr(end)
+                pkms = range(int(start), int(end)+1)
     elif ',' in pks:
         pkms = pks.split(',')
         
@@ -75,7 +85,7 @@ def print_pokemon(pokem):
         
         pkms = create_list(pokem)
         
-        if len(pkms) == 0:
+        if len(pkms) == 0 :
             print "Ungueltiges Pokemon '{0}'".format(pokem)
             return
         
