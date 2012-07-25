@@ -1,5 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf -8 -*-
+#Copyright 2012 sam@s-blu.de
+#Diese Datei ist Teil von PKMNManager.
+
+#PKMNManager ist Freie Software: Sie koennen es unter den Bedingungen
+#der GNU General Public License, wie von der Free Software Foundation,
+#Version 3 der Lizenz oder (nach Ihrer Option) jeder spaeteren
+#veroeffentlichten Version, weiterverbreiten und/oder modifizieren.
+
+#PKMNManager wird in der Hoffnung, dass es nuetzlich sein wird, aber
+#OHNE JEDE GEWaeHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+#Gewaehrleistung der MARKTFaeHIGKEIT oder EIGNUNG FueR EINEN BESTIMMTEN ZWECK.
+#Siehe die GNU General Public License fuer weitere Details.
+
+#Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+#Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 
 
 import sqlite3
@@ -37,8 +52,9 @@ def run():
                 print '\t -info gibt alle Pokemon mit Info aus'
                 print '\t -ed gibt alle Pokemon mit angegeber Edition aus, z.B.: -edHG'
                 print '\t -loc oder -ort gibt alle Pokemon mit angegebem Fundort (falls angegeben, sonst alle) aus, z.B.: -locRoute 24'
-                print '\t \t -rng gibt alle Pokemon in der angegebenen Zahlenrang aus. Start und Endwert werden durch "to" getrennt, z.B.: -rng1to150'
-                print '\t \t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
+                print '\t -rng gibt alle Pokemon in der angegebenen Zahlenrang aus. Start und Endwert werden durch "to" getrennt, z.B.: -rng1to150'
+                print '\t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
+                print '\t Es ist auch moeglich, nach Anfangsfragmenten zu suchen, also zb. nach allen Pokemon, die mit "Pan" anfangen, dafuer einfach pr Pan eingeben'
                 print 'addloc, neuerort'
                 print '\t fuegt einen oder mehrere Fundorte, bestehens aus Edition und Fundort, zum Pokemon hinzu.'
                 print 'rmloc, loescheort'

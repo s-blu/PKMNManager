@@ -1,5 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf -8 -*-
+#Copyright 2012 sam@s-blu.de
+#Diese Datei ist Teil von PKMNManager.
+
+#PKMNManager ist Freie Software: Sie koennen es unter den Bedingungen
+#der GNU General Public License, wie von der Free Software Foundation,
+#Version 3 der Lizenz oder (nach Ihrer Option) jeder spaeteren
+#veroeffentlichten Version, weiterverbreiten und/oder modifizieren.
+
+#PKMNManager wird in der Hoffnung, dass es nuetzlich sein wird, aber
+#OHNE JEDE GEWaeHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+#Gewaehrleistung der MARKTFaeHIGKEIT oder EIGNUNG FueR EINEN BESTIMMTEN ZWECK.
+#Siehe die GNU General Public License fuer weitere Details.
+
+#Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+#Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 
 #from gi.repository import Gtk
 import sqlite3
@@ -11,8 +26,6 @@ ver = '0.4F'
 #Validiert die Existenz des Pokemon. Ist es existent, wird der Name ohne Leerzeichen und mit grossen Anfangsbuchstaben
 # (Datenbankkonform) zurueckgegeben
 def valid_pk(pk):
-    #pk = pk.strip()
-    #pk = pk.capitalize()
     if not pkdao.valid_pk(pk):
         return False
     else:
@@ -25,7 +38,7 @@ def create_list(pks):
     if re.match('[0-9]+[-][0-9]+', pks) != None:
         start, sep, end = pks.partition('-')
         pkms = range(int(start), int(end)+1)
-    else:
+    elif ',' in pks:
         pkms = pks.split(',')
         
         for i in range (0, len(pkms)):
@@ -34,7 +47,8 @@ def create_list(pks):
             pk = pk.capitalize()
             
             pkms[i] = pk
-            
+    else:
+        pkms = pkdao.get_pk_by_name(pks)
         
     return pkms
     
@@ -58,13 +72,21 @@ def prp(arguments):
 def print_pokemon(pokem):
 
     if isinstance(pokem, str):
+        
         pkms = create_list(pokem)
+        
+        if len(pkms) == 0:
+            print "Ungueltiges Pokemon '{0}'".format(pokem)
+            return
         
         for pokemon in pkms:
             if not pkdao.valid_pk(pokemon):
                 print "Ungueltiges Pokemon '{0}'".format(pokemon)
             else:
                 printer(pokemon)
+                
+        
+    #Ist das Pokemon ein int-Wert, wurde es im vorherigen Programmverlauf bereits auf Gueltigkeit geprueft.
     elif isinstance(pokem, int):
         printer(pokem)
   
@@ -91,6 +113,8 @@ def printa(arguments):
         
 # Macht die Ausgabe eines Pokemon. Wird nie direkt ueber das runmodul aufgerufen.
 def printer(pokemon):
+    #pkmns = pkdao.get_pk_by_name(pokemon)
+    #for pk in pkmns:
     pkinfo, locs = pkdao.get_pkinfo(pokemon)
             
     catch = " ( ) "

@@ -1,5 +1,20 @@
 #!/usr/bin/env python
 # -*- coding: utf -8 -*-
+#Copyright 2012 sam@s-blu.de
+#Diese Datei ist Teil von PKMNManager.
+
+#PKMNManager ist Freie Software: Sie koennen es unter den Bedingungen
+#der GNU General Public License, wie von der Free Software Foundation,
+#Version 3 der Lizenz oder (nach Ihrer Option) jeder spaeteren
+#veroeffentlichten Version, weiterverbreiten und/oder modifizieren.
+
+#PKMNManager wird in der Hoffnung, dass es nuetzlich sein wird, aber
+#OHNE JEDE GEWaeHRLEISTUNG, bereitgestellt; sogar ohne die implizite
+#Gewaehrleistung der MARKTFaeHIGKEIT oder EIGNUNG FueR EINEN BESTIMMTEN ZWECK.
+#Siehe die GNU General Public License fuer weitere Details.
+
+#Sie sollten eine Kopie der GNU General Public License zusammen mit diesem
+#Programm erhalten haben. Wenn nicht, siehe <http://www.gnu.org/licenses/>.
 
 #from gi.repository import Gtk
 import sqlite3
@@ -46,7 +61,8 @@ def valid_pk(pokemon):
         return True
     
     return False
-    
+   
+#prueft, ob uebergebene argumente existieren   
 def get_pk_is_known_arg(arg):
     valid = False
     if arg == 'g':
@@ -66,7 +82,16 @@ def get_pk_is_known_arg(arg):
         
     return valid
     
+#gibt eine liste aller pokemon mit angegebenen namensfragment  
+def get_pk_by_name(pokemon):
+    pkmns = []
+    #pokemon = (pokemon,)
+    for row in c.execute("select nr from pokemon where name like '{0}%' ".format(pokemon)):
+        pkmns.append(row[0])
     
+    return pkmns
+    
+#gibt eine liste aller pokemon, die auf die uebergebenen parameter passen
 def get_pk(args):
     g = ''
     ung = ''
@@ -75,8 +100,6 @@ def get_pk(args):
     rng = ''
     ed = ''
     loc = ''
-    
-    
 
     for arg in args:
         arg = arg.strip()
