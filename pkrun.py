@@ -30,45 +30,52 @@ def run():
                 print '================================================'
                 print 'Sie befinden sich im Pokemonmanager V{0}!'.format(pkview.ver)
                 print '- - -'
-                print '"printpokemon" oder "prp" gibt die Daten zum uebergebenen Pokemon aus'
-                print '"print" oder "pr" gibt die Daten gemaess der Parameter aus. Fuer alle Pokemon bei Nachfrage Enter druecken.'
+                print 'print, pr, zeige'
+                print '\t gibt die Daten gemaess der Parameter aus. Fuer alle Pokemon bei Nachfrage Enter druecken.'
                 print '\t -g gibt alle gefangenen Pokemon aus'
                 print '\t -ung gibt alle ungefangenen Pokemon aus'
-                print '\t -ort oder -loc gibt alle Pokemon mit Fundorten aus'
                 print '\t -info gibt alle Pokemon mit Info aus'
                 print '\t -ed gibt alle Pokemon mit angegeber Edition aus, z.B.: -edHG'
-                print '\t -loc gibt alle Pokemon mit angegebem Fundort (falls angegeben, sonst alle) aus, z.B.: -locRoute 24'
-                print '\t -rng gibt alle Pokemon in der angegebenen Zahlenrang aus. Start und Endwert werden durch "to" getrennt, z.B.: -rng1to150'
-                print '\t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
-                print '"addlocation" oder "addloc" fuegt Fundorte zum Pokemon hinzu.'
-                print '"removelocation" oder "rmloc" loescht ein spezifischen Fundort wieder.'
-                print '"addinfo"  fuegt eine Notiz/Information zum Pokemon hinzu.'
-                print '"removeinformation" oder "rminfo" loescht die Notiz/Information zum Pokemon.'
-                print '"setcatched" oder "ct" markiert ein oder mehrere Pokemon als gefangen.'
-                print '"unsetcatched" oder "uct" markiert ein oder mehrere Pokemon als nicht gefangen.'
-                print '"exit" beendet dieses Programm'
-                print '"credits" zeigt Informationen ueber dieses Programm an'
+                print '\t -loc oder -ort gibt alle Pokemon mit angegebem Fundort (falls angegeben, sonst alle) aus, z.B.: -locRoute 24'
+                print '\t \t -rng gibt alle Pokemon in der angegebenen Zahlenrang aus. Start und Endwert werden durch "to" getrennt, z.B.: -rng1to150'
+                print '\t \t Die Parameter sind auch kombinierbar. print -ung -ort gibt also alle ungefangenen Pokemon mit Fundorten aus'
+                print 'addloc, neuerort'
+                print '\t fuegt einen oder mehrere Fundorte, bestehens aus Edition und Fundort, zum Pokemon hinzu.'
+                print 'rmloc, loescheort'
+                print '\t loescht ein spezifischen oder alle Fundorte'
+                print 'addinfo, neueinfo '
+                print '\t fuegt eine Notiz/Information zum Pokemon hinzu.'
+                print 'rminfo, loescheinfo'
+                print '\t loescht die Notiz/Information zum Pokemon.'
+                print 'setcatched, ct, gefangen '
+                print '\t markiert ein oder mehrere Pokemon als gefangen.'
+                print 'unsetcatched, uct, ungefangen'
+                print '\t markiert ein oder mehrere Pokemon als nicht gefangen.'
+                print 'exit, beenden'
+                print '\t beendet dieses Programm'
+                print 'credits'
+                print '\t zeigt Informationen ueber dieses Programm an'
                 print '- - -'
                 print 'Mehrfachangaben durch , trennen oder Ranges angeben, z.B. 3-77'
                 print 'Pokemon koennen nach Eingabe des Befehls oder direkt hinter den Befehl geschrieben werden'
                 print '================================================'
                 
-            elif func == 'exit':
+            elif func == 'exit' or func == 'beenden':
                 running = False
                 pkview.close()
-            elif 'print' in func or 'pr' in func:
+            elif 'zeige' in func or 'pr' in func:
                 pkview.prp(func)
-            elif 'addloc' in func:
+            elif 'addloc' in func or 'neuerort' in func:
                 pkview.addloc(func)
-            elif 'removeloc' in func or 'rmloc' in func:
+            elif 'removeloc' in func or 'rmloc' in func or 'loescheort' in func:
                 pkview.rmloc(func)
-            elif 'addinfo' in func:
+            elif 'addinfo' in func or 'neueinfo' in func:
                 pkview.addinf(func)
-            elif 'removeinfo' in func or 'rminfo' in func:
+            elif 'removeinfo' in func or 'rminfo' in func or 'loescheinfo' in func:
                 pkview.rminf(func)
-            elif 'unsetcatch' in func or 'uct' in func:
+            elif 'unsetcatch' in func or 'uct' in func or 'ungefangen' in func:
                 pkview.uct(func)
-            elif 'setcatch' in func or 'ct'in func:
+            elif 'setcatch' in func or 'ct'in func or 'gefangen' in func:
                 pkview.ct(func)
             elif 'credit' in func:
                 pkview.credit()
@@ -83,7 +90,7 @@ def run():
                     name = raw_input('name? > ')
                     pkview.add_pk(nr, name)
             else:
-                print 'Tippen sie "h"/"help"/"hilfe" fuer eine Erklaerung der Funktionalitaet ein'
+                print '"hilfe" hilft.'
     except KeyboardInterrupt:
         print 'Abbruch des Programms durch Ctrl+C.'
         print 'Das ist zwar unsanft, aber ich wuensche trotzdem einen schoenen Tag!'
