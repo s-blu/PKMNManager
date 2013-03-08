@@ -292,17 +292,20 @@ def restore(filename):
     while (True): 
         line = file.readline()
         if (re.match(r"[0-9]+ [01]", line) != None):
+            #Die erste Informationszeile enthaelt die Pokedexnummer sowie den Catchstatus
             nr, catched = line.split(" ")
             catched = catched.strip()
             set_c(nr, catched)
-            print 'Wiederherstellung laeuft... Pokemon Nr. {0}'.format(nr)
+            print 'Wiederherstellung laeuft... Pokemon Nr. {0}'.format(nr) #AUSGABE AN UI!
             
             line = file.readline()
+            #Die zweite Zeile enthaelt die Info oder ist leer, falls keine Info eingetragen war
             info = line.strip()
             rm_info(nr)
             if info != '':
                 add_info(nr, info)
             rm_all_loc(nr)
+            #Alle darauffolgenden eingerueckten Zeilen enthalten Edition und Fundort
             line = file.readline()
             while (re.match(r"\t .*", line) != None):
                 loc = line.strip()
@@ -311,6 +314,8 @@ def restore(filename):
                 line = file.readline()
         elif not line:
             break
+        else:
+            line = file.readline()
     file.close()
     conn.commit()
 
@@ -346,6 +351,8 @@ def import_data(filename):
             #Bricht die Schleife beim Dateiende ab
             elif not line:
                 break
+            else:
+                line = file.readline()
         file.close()
         conn.commit()
         return True;
@@ -355,17 +362,17 @@ def import_data(filename):
             print 'Schleife fuer Line "{0}"'.format(line)
             if (re.match(r"[0-9]+", line) != None):
                 nr = line.strip()
-                print 'Nr: "{0}"'.format(nr) #DEBUG
                 line = file.readline()
                 print 'Zeile nach Info: "{0}"'.format(line)
                 while (re.match(r"\t .*", line) != None):
                     loc = line.strip()
                     ed, loc = loc.split(' ', 1)
-                    print 'ed "{0}" loc "{1}"'.format(ed, loc) #DEBUG
                     add_loc(nr, ed, loc)
                     line = file.readline()
             elif not line:
                 break
+            else:
+                line = file.readline()
         file.close()
         conn.commit()
         return True;
