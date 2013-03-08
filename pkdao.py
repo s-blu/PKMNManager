@@ -18,6 +18,7 @@
 
 #from gi.repository import Gtk
 import sqlite3
+import re
 
 conn = sqlite3.connect('db/pkmmanager.db')
 c = conn.cursor()
@@ -247,12 +248,17 @@ def set_c(pokemon, catch):
     #holt die nr des pokemon, falls name angegeben
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
-    
+    if not catch.isdigit():
+        if catch == '0':
+            catch = 0;
+        else:
+            catch = 1;
     inserts = (catch, pokemon)
     c.execute('update pokemon set catched=? where nr=?', inserts)
     
     conn.commit()
-    
+
+#erstellt eine backupdatei mit allen wichtigen daten    
 def create_backup(filename):
     # Holt alle PKMN mit Nr, Catched und Info
     pkmns = []
@@ -261,31 +267,147 @@ def create_backup(filename):
         pkmns.append([row[0], row[1], info])
     #oeffnet die datei und screibt die infos und locations
     backup = open(filename + ".txt", "w")
+    backup.write('\t rst \t \t\n')
     for pkmn in pkmns:
-        backup.write(u"{0} {1} \n \t{2} \n".format(pkmn[0], pkmn[1], pkmn[2]))
+        backup.write(u"{0} {1}\n\t{2}\n".format(pkmn[0], pkmn[1], pkmn[2]))
         for row in c.execute('select edition, location from locations where nr = ?', (pkmn[0],)):
-            backup.write(u"\t{0} {1}\n".format(row[0], row[1]))
+            backup.write(u"\t {0} {1}\n".format(row[0], row[1]))
+        backup.write(u" \n")
     backup.close()
+
+def check_if_restorefile(filename):
+    file = open(filename, "r")
+    firstline = file.readline()
+    if (firstline == '\t rst \t \t\n'):
+        return True
+    else:
+        return False
+
+def restore(filename):
+    if not check_if_restorefile(filename):
+        return
+    file = open(filename, "r")
+    #Die erste Zeile dient zur Kennzeichnung des Dateityps und ist ohne informatielle Relevanz
+    file.readline()
+    while (True): 
+        line = file.readline()
+        if (re.match(r"[0-9]+ [01]", line) != None):
+            nr, catched = line.split(" ")
+            catched = catched.strip()
+            set_c(nr, catched)
+            print 'Wiederherstellung laeuft... Pokemon Nr. {0}'.format(nr)
+            
+            line = file.readline()
+            info = line.strip()
+            rm_info(nr)
+            if info != '':
+                add_info(nr, info)
+            rm_all_loc(nr)
+            line = file.readline()
+            while (re.match(r"\t .*", line) != None):
+                loc = line.strip()
+                ed, loc = loc.split(' ', 1)
+                add_loc(nr, ed, loc)
+                line = file.readline()
+        elif not line:
+            break
+    file.close()
+    conn.commit()
+
+def get_info(nr):
+    for row in c.execute('select infos from pokemon where nr = ?', (nr,)):
+        return row[0]
     
+def import_data(filename):
+    file = open(filename, "r")
+    ifinfos = file.readline()
+    ifinfos = ifinfos.strip()
+    #Die erste Zeile enthaelt die Information, ob der Export mit oder ohne Info erfolgte
+    if ifinfos == "True":
+        line = file.readline()
+        while (True): 
+            # Die Reihenfolge der Daten ist: Nummer \n Info \n Edition und Location (mehrfach)
+            if (re.match(r"[0-9]+", line) != None):
+                #Die Nummer wird fuer die folgenden Abfragen ausgelesen und gespeichert
+                nr = line.strip()
+                line = file.readline()
+                info = line.strip()
+                # Falls eine Info angegeben, wird sie durch ein // getrennt an die bestehende angehaengt
+                if info != '':
+                    info = (get_info(nr) if get_info(nr) != None else "") + " // " + info
+                    add_info(nr, info)
+                line = file.readline()
+                # Alle folgenden Editionen und Locations werden ausgelesen und eingetragen
+                while (re.match(r"\t .*", line) != None):
+                    loc = line.strip()
+                    ed, loc = loc.split(' ', 1)
+                    add_loc(nr, ed, loc)
+                    line = file.readline()
+            #Bricht die Schleife beim Dateiende ab
+            elif not line:
+                break
+        file.close()
+        conn.commit()
+        return True;
+    elif ifinfos == "False":
+        line = file.readline()
+        while (True):   
+            print 'Schleife fuer Line "{0}"'.format(line)
+            if (re.match(r"[0-9]+", line) != None):
+                nr = line.strip()
+                print 'Nr: "{0}"'.format(nr) #DEBUG
+                line = file.readline()
+                print 'Zeile nach Info: "{0}"'.format(line)
+                while (re.match(r"\t .*", line) != None):
+                    loc = line.strip()
+                    ed, loc = loc.split(' ', 1)
+                    print 'ed "{0}" loc "{1}"'.format(ed, loc) #DEBUG
+                    add_loc(nr, ed, loc)
+                    line = file.readline()
+            elif not line:
+                break
+        file.close()
+        conn.commit()
+        return True;
+    else:
+        return False;
     
+#erstellt eine exportdatei mit oder ohne Infos und Locationinformationen    
 def export(info):
+    # jenachdem, ob die info mitgespeichert wird, werdena ndere informationen gelesen und geschrieben
     if (info):
         q = 'select distinct pokemon.nr, pokemon.infos from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
+        # Holt alle PKMN mit Nr und Info, fuer die Locations gespeichert sind
+        pkmns = []
+        for row in c.execute(q):
+            info = ("" if row[1] == None else row[1])
+            pkmns.append([row[0], info])
+        #oeffnet die datei und screibt die infos und locations
+        backup = open("export.txt", "w")
+        #vermerkt, das dies eine export mit infos ist
+        backup.write(u"True\n")
+        for pkmn in pkmns:
+            backup.write(u"{0}\n \t{1} \n".format(pkmn[0], pkmn[1]))
+            for row in c.execute('select edition, location from locations where nr = ?', (pkmn[0],)):
+                backup.write(u"\t {0} {1}\n".format(row[0], row[1]))
+        backup.close()
     else:
         q = 'select distinct pokemon.nr from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
-    # Holt alle PKMN mit Nr und evt Info (falls True uebergeben wurde), fuer die Locations gespeichert sind
-    pkmns = []
-    for row in c.execute(q):
-        info = ("" if row[1] == None else row[1])
-        pkmns.append([row[0], info])
-    #oeffnet die datei und screibt die infos und locations
-    backup = open("export.txt", "w")
-    for pkmn in pkmns:
-        backup.write(u"{0}\n \t{1} \n".format(pkmn[0], pkmn[1]))
-        for row in c.execute('select edition, location from locations where nr = ?', (pkmn[0],)):
-            backup.write(u"\t{0} {1}\n".format(row[0], row[1]))
-    backup.close()
-        
+        # Holt alle PKMN mit Nr, fuer die Locations gespeichert sind
+        pkmns = []
+        for row in c.execute(q):
+            pkmns.append(row[0])
+        #oeffnet die datei und screibt die infos und locations
+        backup = open("export.txt", "w")
+        #vermerkt, das dies eine export ohne infos ist
+        backup.write(u"False\n")
+        for pkmn in pkmns:
+            backup.write(u"{0}\n".format(pkmn))
+            for row in c.execute('select edition, location from locations where nr = ?', (pkmn,)):
+                backup.write(u"\t {0} {1}\n".format(row[0], row[1]))
+        backup.close()
+
+ 
 # Gibt die Nummer des Pokemon, wenn der Name angeben wurde
 def get_pknr(pokemon):
     if isinstance(pokemon, str) and not pokemon.isdigit():
