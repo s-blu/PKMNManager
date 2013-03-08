@@ -306,6 +306,7 @@ def set_c(pokem):
         else:
             pkdao.set_c(pokemon, 1)
             print_pokemon(pokemon)
+           
             
 # Ermoeglicht den Aufruf von uset_c mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
 def uct(arguments):
@@ -327,8 +328,54 @@ def uset_c(pokem):
         else:
             pkdao.set_c(pokemon, 0)
             print_pokemon(pokemon)
-            
-            
+ 
+def backup():
+    filename = raw_input('Wie soll die Backupdatei heissen? > ')
+    pkdao.create_backup(filename)
+  
+def restore():
+    confirm = raw_input('Sind Sie sich sicher, das sie die Datenbank wiederherstellen wollen? \n Alle Daten, die nicht in der Backupdatei enthalten sind, werden ueberschrieben! \n Die Wiederherstellung nimmt einige Zeit in Anspruch. \n Tippen Sie YES, wenn sie sich sicher sind. > ')
+    if confirm == 'YES':
+        filename = raw_input('Aus welcher Datei soll die Datenbank wiederhergestellt werden? > ')
+        if (check_filename(filename)):
+            if (pkdao.check_if_restorefile(filename)):
+                pkdao.restore(filename)
+            else:
+                print 'Diese Datei ist keine Backupdatei. Bitte beachten Sie, das nur Dateien, die mit dem Befehl backup erstellt wurden, verwendet werden duerfen'
+        else: 
+            print 'Die uebergebene Datei ist nicht existent'
+    else:
+        print 'Eingabe entspricht nicht YES, Wiederherstellungsvorgang wird abgebrochen.'
+        
+        
+def export(): 
+    info = raw_input('Moechten Sie die Infos mit exportieren? Y/no > ').lower()
+    if info == 'no' or info == 'n':
+        pkdao.export(False)
+    else:
+        pkdao.export(True)
+
+def import_file():
+    file = raw_input('Aus welcher Datei soll importiert werden? > ')
+    if (check_filename(file)):
+        print 'Bitte warten....'
+        success = pkdao.import_data(file)
+        if (success):
+            print 'Import war erfolgreich!'
+        else:
+            print 'Der Import konnte nicht durchgefuehrt werden.'
+    else:
+        print 'Die uebergebene Datei ist nicht existent'
+        
+def check_filename(name):
+    try: 
+        file = open(name, "r") 
+        file.close()
+        return True;
+    except IOError:
+        return False;
+    
+    
 def add_pk(nr, name):
     pkdao.add_pk(nr, name)
 def credit():

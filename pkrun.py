@@ -67,6 +67,16 @@ def run():
                 print '\t markiert ein oder mehrere Pokemon als gefangen.'
                 print 'unsetcatched, uct, ungefangen'
                 print '\t markiert ein oder mehrere Pokemon als nicht gefangen.'
+                print 'export'
+                print '\t exportiert die Fundortinformationen und wahlweise die Infoeintraege zur Weitergabe'
+                print 'import'
+                print '\t Importiert per Export erstellte Fundort und evt. Infoeintraege. Eigene Eintraege bleiben dabei erhalten'
+                print 'backup'
+                print '\t Erstellt eine Backupdatei zur Wiederherstellung der Datenbank. Diese Funktion ist nicht zur Weitergabe sondern zur Sicherung der Daten gedacht.'
+                print '\t Per Backup erstellte Dateien sind nicht per Import einpflegbar!'
+                print 'restore'
+                print '\t Liest eine Backupdatei ein und fuellt die Datenbank mit diesen Daten'
+                print '\t ACHTUNG! DABEI WIRD DIE GESAMTE DATENBANK UEBERSCHRIEBEN! Alle nicht im Backup enthaltenen Daten gehen verloren!'
                 print 'exit, beenden'
                 print '\t beendet dieses Programm'
                 print 'credits'
@@ -105,6 +115,14 @@ def run():
                     nr = raw_input('nr? > ')
                     name = raw_input('name? > ')
                     pkview.add_pk(nr, name)
+            elif 'backup' == func:
+                pkview.backup()
+            elif 'restore' == func:
+                pkview.restore()
+            elif 'export' == func:
+                pkview.export()
+            elif 'import' == func:
+                pkview.import_file()
             else:
                 print '"hilfe" hilft.'
     except KeyboardInterrupt:
