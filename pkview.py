@@ -21,7 +21,7 @@ import sqlite3
 import pkdao
 import re
 
-ver = '0.4.1'
+ver = '0.5'
 
 #Validiert die Existenz des Pokemon. Ist es existent, wird der Name ohne Leerzeichen und mit grossen Anfangsbuchstaben
 # (Datenbankkonform) zurueckgegeben
