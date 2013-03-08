@@ -266,7 +266,7 @@ def create_backup(filename):
         info = ("" if row[2] == None else row[2])
         pkmns.append([row[0], row[1], info])
     #oeffnet die datei und screibt die infos und locations
-    backup = open(filename + ".txt", "w")
+    backup = open(filename, "w")
     backup.write('\t rst \t \t\n')
     for pkmn in pkmns:
         backup.write(u"{0} {1}\n\t{2}\n".format(pkmn[0], pkmn[1], pkmn[2]))
@@ -330,11 +330,13 @@ def import_data(filename):
     #Die erste Zeile enthaelt die Information, ob der Export mit oder ohne Info erfolgte
     if ifinfos == "True":
         line = file.readline()
+        pkmns = []
         while (True): 
             # Die Reihenfolge der Daten ist: Nummer \n Info \n Edition und Location (mehrfach)
             if (re.match(r"[0-9]+", line) != None):
                 #Die Nummer wird fuer die folgenden Abfragen ausgelesen und gespeichert
                 nr = line.strip()
+                pkmns.append(nr)
                 line = file.readline()
                 info = line.strip()
                 # Falls eine Info angegeben, wird sie durch ein // getrennt an die bestehende angehaengt
@@ -355,15 +357,15 @@ def import_data(filename):
                 line = file.readline()
         file.close()
         conn.commit()
-        return True;
+        return pkmns;
     elif ifinfos == "False":
+        pkmns = []
         line = file.readline()
         while (True):   
-            print 'Schleife fuer Line "{0}"'.format(line)
             if (re.match(r"[0-9]+", line) != None):
                 nr = line.strip()
+                pkmns.append(nr)
                 line = file.readline()
-                print 'Zeile nach Info: "{0}"'.format(line)
                 while (re.match(r"\t .*", line) != None):
                     loc = line.strip()
                     ed, loc = loc.split(' ', 1)
@@ -375,9 +377,9 @@ def import_data(filename):
                 line = file.readline()
         file.close()
         conn.commit()
-        return True;
+        return pkmns;
     else:
-        return False;
+        return None;
     
 #erstellt eine exportdatei mit oder ohne Infos und Locationinformationen    
 def export(info):
@@ -390,7 +392,7 @@ def export(info):
             info = ("" if row[1] == None else row[1])
             pkmns.append([row[0], info])
         #oeffnet die datei und screibt die infos und locations
-        backup = open("export.txt", "w")
+        backup = open("pkmnmanager-export", "w")
         #vermerkt, das dies eine export mit infos ist
         backup.write(u"True\n")
         for pkmn in pkmns:
@@ -405,7 +407,7 @@ def export(info):
         for row in c.execute(q):
             pkmns.append(row[0])
         #oeffnet die datei und screibt die infos und locations
-        backup = open("export.txt", "w")
+        backup = open("pkmnmanager-export", "w")
         #vermerkt, das dies eine export ohne infos ist
         backup.write(u"False\n")
         for pkmn in pkmns:

@@ -360,8 +360,10 @@ def import_file():
     if (check_filename(file)):
         print 'Bitte warten....'
         success = pkdao.import_data(file)
-        if (success):
+        if (success != None):
             print 'Import war erfolgreich!'
+            for pk in success:
+                printer(pk)
         else:
             print 'Der Import konnte nicht durchgefuehrt werden.'
     else:
