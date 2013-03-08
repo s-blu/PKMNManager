@@ -35,6 +35,7 @@ def get_pkinfo(pokemon):
     pkinfo = []
     locs = []   
     
+    #pokemon muss in ein tupel umgewandelt werden, da die execute als argument ein tupel erwartet
     pokemon = (pokemon,)
     #Ermittung der Pokemoninformationen
     for row in c.execute('select nr, name, catched, infos from pokemon where nr = ?', pokemon):
@@ -241,6 +242,7 @@ def add_info(pokemon, info):
 def rm_info(pokemon):
     add_info(pokemon, None) 
 
+# Setzt den Catchwert des uebergebenen Pokemons (Nr oder Name) auf den uebergebenen Wert
 def set_c(pokemon, catch):
     #holt die nr des pokemon, falls name angegeben
     if isinstance(pokemon, str) and not pokemon.isdigit():
@@ -248,8 +250,43 @@ def set_c(pokemon, catch):
     
     inserts = (catch, pokemon)
     c.execute('update pokemon set catched=? where nr=?', inserts)
+    
+    conn.commit()
+    
+def create_backup(filename):
+    # Holt alle PKMN mit Nr, Catched und Info
+    pkmns = []
+    for row in c.execute('select distinct pokemon.nr, pokemon.catched, pokemon.infos from pokemon order by pokemon.nr'):
+        info = ("" if row[2] == None else row[2])
+        pkmns.append([row[0], row[1], info])
+    #oeffnet die datei und screibt die infos und locations
+    backup = open(filename + ".txt", "w")
+    for pkmn in pkmns:
+        backup.write(u"{0} {1} \n \t{2} \n".format(pkmn[0], pkmn[1], pkmn[2]))
+        for row in c.execute('select edition, location from locations where nr = ?', (pkmn[0],)):
+            backup.write(u"\t{0} {1}\n".format(row[0], row[1]))
+    backup.close()
+    
+    
+def export(info):
+    if (info):
+        q = 'select distinct pokemon.nr, pokemon.infos from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
+    else:
+        q = 'select distinct pokemon.nr from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
+    # Holt alle PKMN mit Nr und evt Info (falls True uebergeben wurde), fuer die Locations gespeichert sind
+    pkmns = []
+    for row in c.execute(q):
+        info = ("" if row[1] == None else row[1])
+        pkmns.append([row[0], info])
+    #oeffnet die datei und screibt die infos und locations
+    backup = open("export.txt", "w")
+    for pkmn in pkmns:
+        backup.write(u"{0}\n \t{1} \n".format(pkmn[0], pkmn[1]))
+        for row in c.execute('select edition, location from locations where nr = ?', (pkmn[0],)):
+            backup.write(u"\t{0} {1}\n".format(row[0], row[1]))
+    backup.close()
         
-  
+# Gibt die Nummer des Pokemon, wenn der Name angeben wurde
 def get_pknr(pokemon):
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = pokemon.capitalize()

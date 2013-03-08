@@ -105,6 +105,10 @@ def run():
                     nr = raw_input('nr? > ')
                     name = raw_input('name? > ')
                     pkview.add_pk(nr, name)
+            elif 'backup' == func:
+                pkview.backup()
+            elif 'export' == func:
+                pkview.export()
             else:
                 print '"hilfe" hilft.'
     except KeyboardInterrupt:

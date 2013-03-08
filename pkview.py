@@ -306,6 +306,7 @@ def set_c(pokem):
         else:
             pkdao.set_c(pokemon, 1)
             print_pokemon(pokemon)
+           
             
 # Ermoeglicht den Aufruf von uset_c mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
 def uct(arguments):
@@ -327,7 +328,18 @@ def uset_c(pokem):
         else:
             pkdao.set_c(pokemon, 0)
             print_pokemon(pokemon)
-            
+ 
+def backup():
+    filename = raw_input('Wie soll die Backupdatei heissen? > ')
+    pkdao.create_backup(filename)
+    
+def export(): 
+    info = raw_input('Moechten Sie die Infos mit exportieren? Y/no > ').lower()
+    if info == 'no' or info == 'n':
+        pkdao.export(False)
+    else:
+        pkdao.export(True)
+    
             
 def add_pk(nr, name):
     pkdao.add_pk(nr, name)
