@@ -248,7 +248,7 @@ def set_c(pokemon, catch):
     #holt die nr des pokemon, falls name angegeben
     if isinstance(pokemon, str) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
-    if not catch.isdigit():
+    if isinstance(catch, str) and not catch.isdigit():
         if catch == '0':
             catch = 0;
         else:
