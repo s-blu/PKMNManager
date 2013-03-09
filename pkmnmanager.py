@@ -123,6 +123,8 @@ def run():
                 pkview.export()
             elif 'import' == func:
                 pkview.import_file()
+            elif 'html' in func:
+                pkview.create_html(func)
             else:
                 print '"hilfe" hilft.'
     except KeyboardInterrupt:

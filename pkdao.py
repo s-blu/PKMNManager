@@ -427,6 +427,29 @@ def get_pknr(pokemon):
             
     return False
 
+def create_html(pkmns, args):
+    
+    args = args.split('-')
+    args = args [1:]
+    filename = "html"
+    for arg in args:
+        filename += "_{0}".format(arg)
+    filename += ".html"
+    file = open(filename, "w")
+    file.writelines(("<!doctype html>","<html>","<head></head>","<body>"))
+    for pk in pkmns:
+        pkinfos, locs = get_pkinfo(pk)
+        file.write("<h1>{0} {1}</h1>".format(pkinfos[0], pkinfos[1]))
+        file.write("<div class='ct'>{0}</div>".format(pkinfos[2]))
+        file.write("<div class='info'>{0}</div>".format(pkinfos[3]))
+        file.write("<div class='locs'>")
+        for loc in locs:
+            file.write("<span class='loc'>{0} {1}</div>".format(loc[0], loc[1]))
+        file.write("</div>")
+    file.writelines(("</body>", "</html>"))
+    file.close()
+
+
 # Debug. Zum Aktivieren "add_pk" eingeben, enter "add_pk", nr und name    
 def add_pk(nr, name):
     inserts = (nr, name)

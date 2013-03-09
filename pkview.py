@@ -101,9 +101,8 @@ def print_pokemon(pokem):
     #Ist das Pokemon ein int-Wert, wurde es im vorherigen Programmverlauf bereits auf Gueltigkeit geprueft.
     elif isinstance(pokem, int):
         printer(pokem)
-  
-#Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
-def printa(arguments):
+        
+def get_pklist(arguments):
     arguments = arguments.split('-')
     arguments = arguments [1:]
 
@@ -113,7 +112,19 @@ def printa(arguments):
             print "Unbekannter Parameter '{0}'".format(arg)
             return
 
-    list = pkdao.get_pk(arguments)
+    return pkdao.get_pk(arguments)
+    
+def create_html(arguments):
+    prp(arguments)
+    list = get_pklist(arguments)
+    pkdao.create_html(list, arguments)
+    
+  
+#Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
+def printa(arguments):
+
+    
+    list = get_pklist(arguments)
     
     if len(list) > 100:
         dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)+1))
@@ -122,6 +133,7 @@ def printa(arguments):
             
     for pk in list:
         print_pokemon(pk)
+       
         
 # Macht die Ausgabe eines Pokemon. Wird nie direkt ueber das runmodul aufgerufen.
 def printer(pokemon):
