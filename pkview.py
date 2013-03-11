@@ -60,7 +60,7 @@ def create_list(pks):
     elif re.match('[0-9]+', pks) != None:
         pkms.append(pks)
     else:
-        pkms = pkdao.get_pk_by_name(pks)
+        pkms = pkdao.get_pk_list_by_namesnippet(pks)
         
     return pkms
     
@@ -108,11 +108,11 @@ def get_pklist(arguments):
 
     for arg in arguments:
         arg = arg.strip()
-        if not pkdao.get_pk_is_known_arg(arg):
+        if not pkdao.is_known_arg(arg):
             print "Unbekannter Parameter '{0}'".format(arg)
             return
 
-    return pkdao.get_pk(arguments)
+    return pkdao.get_pk_list_by_args(arguments)
     
 def create_html(arguments):
     prp(arguments)
@@ -137,7 +137,7 @@ def printa(arguments):
         
 # Macht die Ausgabe eines Pokemon. Wird nie direkt ueber das runmodul aufgerufen.
 def printer(pokemon):
-    #pkmns = pkdao.get_pk_by_name(pokemon)
+    #pkmns = pkdao.get_pk_list_by_namesnippet(pokemon)
     #for pk in pkmns:
     pkinfo, locs = pkdao.get_pkinfo(pokemon)
             
@@ -223,7 +223,7 @@ def rm_location(pokem):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
             invalidpk += 1
         else:
-            if pkdao.have_locs(pokemon) == 0:
+            if pkdao.get_number_of_locs(pokemon) == 0:
                 print "Fuer Pokemon '{0}' existieren keine Locationangaben".format(pokemon)
                 invalidpk += 1
             else:
@@ -257,17 +257,17 @@ def rm_location(pokem):
                 morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
                 morerm = morerm.lower()
             
-# Ermoeglicht den Aufruf von add_info mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
+# Ermoeglicht den Aufruf von set_info mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
 def addinf(arguments):
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
     if len(arguments) > 0:
-        add_info(arguments[0])
+        set_info(arguments[0])
     else:
         pokem = raw_input('Pokemonnr oder -name? > ')
-        add_info(pokem) 
+        set_info(pokem) 
 
-def add_info(pokem):
+def set_info(pokem):
     info = raw_input('Info? > ')
     pkms = create_list(pokem)
     
@@ -275,7 +275,7 @@ def add_info(pokem):
         if not pkdao.valid_pk(pokemon):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
         else:
-            pkdao.add_info(pokemon, unicode(info))
+            pkdao.set_info(pokemon, unicode(info))
             print_pokemon(pokemon)
     
 # Ermoeglicht den Aufruf von rm_info mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
