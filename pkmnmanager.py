@@ -1,6 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf -8 -*-
-#Copyright 2012 sam@s-blu.de
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#Copyright 2012-2013 sam@s-blu.de
 #Diese Datei ist Teil von PKMNManager.
 
 #PKMNManager ist Freie Software: Sie koennen es unter den Bedingungen

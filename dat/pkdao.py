@@ -1,6 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf -8 -*-
-#Copyright 2012 sam@s-blu.de
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#Copyright 2012-2013 sam@s-blu.de
 #Diese Datei ist Teil von PKMNManager.
 
 #PKMNManager ist Freie Software: Sie koennen es unter den Bedingungen
@@ -44,7 +44,7 @@ c = conn.cursor()
 # TODO: Ueberpruefen, ob Implementierung sinnvoll (v.a. zweiter teil)
 def valid_pk(pokemon):
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
         if not pokemon:
             return False
@@ -67,7 +67,7 @@ def get_pk_list_by_namesnippet(namesnippet):
 """ Gibt die Nummer des Pokemon mit dem angegebenen Namen. 
 Ist kein Pokemon mit dem Namen vorhanden oder wurde kein String angegeben, wird None zurueckgegeben. """
 def get_pknr(pokemon):
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = pokemon.capitalize()
         pokemon = (pokemon,)
         for row in c.execute('select nr from pokemon where name = ?', pokemon):
@@ -80,7 +80,7 @@ Das zweite Element ist eine Liste, die wiederrum Listen mit edition und location
 def get_pkinfo(pokemon):
 
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
 
     pkinfo = []
@@ -198,7 +198,7 @@ def get_pk_list_by_args(args):
 def get_number_of_locs(pokemon):
     locs = 0
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
     pokemon = (pokemon,)
     for row in c.execute('select * from locations where nr = ?', pokemon):
@@ -228,7 +228,7 @@ def get_info(nr):
 def add_loc(pokemon, edition, location):
 
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
         
     edition = edition.upper()
@@ -242,7 +242,7 @@ def add_loc(pokemon, edition, location):
 """ Entfernt den durch Nummer, Edition und Location spezifizierten Eintrag aus der Locationstabelle """  
 def rm_loc(pokemon, edition, location):
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
         
 
@@ -254,7 +254,7 @@ def rm_loc(pokemon, edition, location):
 """ Entfernt alle zu der uebergebenen Pokemonnummer gehoerenden Eintraege aus der Locationstabelle """ 
 def rm_all_loc(pokemon):
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
         
 
@@ -265,17 +265,17 @@ def rm_all_loc(pokemon):
 
     
 """ 
------->> Manipulation der Pokemontabelle <<------ 
+------>> Manipulation der Pokemontabelleüüü <<------ 
 """    
     
 """ Fuegt die ubergebene Information bei der uebergebenen Nummer ein. Eventuell vorhandene Eintraege werden dabei ueberschrieben. """    
 def set_info(pokemon, info):
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
-    
+    info.encode("utf-8")
     inserts = (info, pokemon)
-    c.execute('update pokemon set infos=? where nr=?', inserts)
+    c.execute(u'update pokemon set infos=? where nr=?', inserts)
 
     conn.commit()
  
@@ -286,11 +286,11 @@ def rm_info(pokemon):
 """ Setzt den Catchwert des uebergebenen Pokemons (Nr oder Name) auf den uebergebenen Wert, wobei dieser 0 fuer ungefangen oder 1 fuer gefangen entsprechen sollte. """
 def set_c(pokemon, catch):
     #holt die nr des pokemon, falls name angegeben
-    if isinstance(pokemon, str) and not pokemon.isdigit():
+    if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
     """ Falls ein String angegeben wird, wird '0' als 0 (ungefangen) und '1' als 1 (gefangen) interpretiert. 
     Alles andere fuehrt zu einem Verlassen der Methode, damit der Wert nicht geaendert wird. """
-    if isinstance(catch, str) and not catch.isdigit():
+    if isinstance(catch, basestring ) and not catch.isdigit():
         if catch == '1':
             catch = 1
         elif catch == '0':

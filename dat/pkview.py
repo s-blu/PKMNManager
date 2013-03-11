@@ -1,6 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf -8 -*-
-#Copyright 2012 sam@s-blu.de
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+#Copyright 2012-2013 sam@s-blu.de
 #Diese Datei ist Teil von PKMNManager.
 
 #PKMNManager ist Freie Software: Sie koennen es unter den Bedingungen
@@ -275,7 +275,7 @@ def set_info(pokem):
         if not pkdao.valid_pk(pokemon):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
         else:
-            pkdao.set_info(pokemon, unicode(info))
+            pkdao.set_info(pokemon, info)
             print_pokemon(pokemon)
     
 # Ermoeglicht den Aufruf von rm_info mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
