@@ -18,7 +18,7 @@
 
 
 import sqlite3
-import pkview
+import dat.pkview as pkview
 import sys
 
 
