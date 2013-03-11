@@ -359,7 +359,10 @@ def restore():
     else:
         print 'Eingabe entspricht nicht YES, Wiederherstellungsvorgang wird abgebrochen.'
         
-        
+def announce_restore_state(nr):
+    print 'Wiederherstellung laeuft... Pokemon Nr. {0}'.format(nr)
+
+  
 def export(): 
     info = raw_input('Moechten Sie die Infos mit exportieren? Y/no > ').lower()
     if info == 'no' or info == 'n':

@@ -19,6 +19,7 @@
 #from gi.repository import Gtk
 import sqlite3
 import re
+import pkview
 
 conn = sqlite3.connect('db/pkmmanager.db')
 c = conn.cursor()
@@ -296,7 +297,7 @@ def restore(filename):
             nr, catched = line.split(" ")
             catched = catched.strip()
             set_c(nr, catched)
-            print 'Wiederherstellung laeuft... Pokemon Nr. {0}'.format(nr) #AUSGABE AN UI!
+            pkview.announce_restore_state(nr)
             
             line = file.readline()
             #Die zweite Zeile enthaelt die Info oder ist leer, falls keine Info eingetragen war
