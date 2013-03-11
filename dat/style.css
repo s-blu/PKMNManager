@@ -24,10 +24,11 @@ h1 {
 }
 .ct {
     float: right;
-    padding:-10px;
+    padding:0px;
+    margin:-5px;
 }
 .locs {
-    margin-left:35px;
+    margin-left:60px;
     padding:5px;
 }
 .i {
@@ -38,4 +39,9 @@ h1 {
     padding-left:5px;
     color:black;
    
+}
+.locsymbol{
+    float:left;
+    padding: 5px;
+    margin-left:35px;
 }

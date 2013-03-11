@@ -265,7 +265,7 @@ def rm_all_loc(pokemon):
 
     
 """ 
------->> Manipulation der Pokemontabelleüüü <<------ 
+------>> Manipulation der Pokemontabelle <<------ 
 """    
     
 """ Fuegt die ubergebene Information bei der uebergebenen Nummer ein. Eventuell vorhandene Eintraege werden dabei ueberschrieben. """    
@@ -273,7 +273,6 @@ def set_info(pokemon, info):
     #holt die nr des pokemon, falls name angegeben
     if isinstance(pokemon, basestring ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
-    info.encode("utf-8")
     inserts = (info, pokemon)
     c.execute(u'update pokemon set infos=? where nr=?', inserts)
 
@@ -529,12 +528,12 @@ def create_html(pkmns, args):
         catch = "1.png" if pkinfos[2] == 1 else "0.png"
         file.write("<h1><img src='dat/{2}' alt='{3}' class='ct'> {0} {1}</h1>\n".format(pkinfos[0], pkinfos[1], catch, pkinfos[2]))
         if pkinfos[3] != None:
-            file.write("<div class='info'><span class='i'>i</span> {0} </div>\n".format(pkinfos[3]))
+            file.write("\t<div class='info'><span class='i'>i</span> {0} </div>\n".format(pkinfos[3]))
         if get_number_of_locs(pkinfos[0]) > 0:
-            file.write("<div class='locs'>\n")
+            file.write("\t<div class='locs'>\n")
             for loc in locs:
-                file.write("<span class='loc'><b>{0}</b> {1}</span><br>\n".format(loc[0], loc[1]))
-            file.write("</div>\n")
+                file.write("\t\t<span class='loc'><b>{0}</b> {1}</span><br>\n".format(loc[0], loc[1]))
+            file.write("\t</div>\n")
     file.writelines(("</body> \n", "</html>"))
     file.close()
 
