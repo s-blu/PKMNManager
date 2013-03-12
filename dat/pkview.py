@@ -115,9 +115,14 @@ def get_pklist(arguments):
     return pkdao.get_pk_list_by_args(arguments)
     
 def create_html(arguments):
-    prp(arguments)
     list = get_pklist(arguments)
-    pkdao.create_html(list, arguments)
+    if len(list) == 0:
+        print "Diese Abfrage enhaelt keine Ergebnisse. HTML wird nicht erstellt."
+        return;
+    prp(arguments)
+    htmlconfirm = raw_input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower()
+    if htmlconfirm != 'n' and htmlconfirm != 'no':
+        pkdao.create_html(list, arguments)
     
   
 #Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus

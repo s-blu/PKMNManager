@@ -21,6 +21,7 @@
 import sqlite3
 import re
 import pkview
+import codecs
 
 conn = sqlite3.connect('db/pkmmanager.db')
 c = conn.cursor()
@@ -521,19 +522,19 @@ def create_html(pkmns, args):
     for arg in args:
         filename += "_{0}".format(arg)
     filename += ".html"
-    file = open(filename, "w")
+    file = codecs.open(filename, "w", encoding="utf-8")
     file.writelines(("<!doctype html> \n","<html> \n","<head><link href='dat/style.css' type='text/css' rel='stylesheet'></head> \n","<body> \n"))
     for pk in pkmns:
         pkinfos, locs = get_pkinfo(pk)
         catch = "1.png" if pkinfos[2] == 1 else "0.png"
         file.write("<h1><img src='dat/{2}' alt='{3}' class='ct'> {0} {1}</h1>\n".format(pkinfos[0], pkinfos[1], catch, pkinfos[2]))
         if pkinfos[3] != None:
-            file.write("\t<div class='info'><span class='i'>i</span> {0} </div>\n".format(pkinfos[3]))
+            file.write("\t<div class='info'><span class='infoi'>i</span> {0} </div>\n".format(pkinfos[3]))
         if get_number_of_locs(pkinfos[0]) > 0:
-            file.write("\t<div class='locs'>\n")
+            file.write("\t<table class='locs'>\n")
             for loc in locs:
-                file.write("\t\t<span class='loc'><b>{0}</b> {1}</span><br>\n".format(loc[0], loc[1]))
-            file.write("\t</div>\n")
+                file.write("\t\t<tr><td><b>{0}</b> </td><td>{1}</td></tr>\n".format(loc[0], loc[1]))
+            file.write("\t</table>\n")
     file.writelines(("</body> \n", "</html>"))
     file.close()
 
