@@ -23,20 +23,111 @@ import re
 
 ver = '0.5'
 
-#Validiert die Existenz des Pokemon. Ist es existent, wird der Name ohne Leerzeichen und mit grossen Anfangsbuchstaben
-# (Datenbankkonform) zurueckgegeben
-def valid_pk(pk):
-    if not pkdao.valid_pk(pk):
-        return False
+
+
+""" 
+>>>>>>>>>
+---------------------------------------------------------
+------------->> Methoden des Printcommand <<------------- 
+---------------------------------------------------------
+>>>>>>>>>
+"""
+
+""" 
+--------------------------------------------------------
+------>> Methoden, die den Befehl verarbeiten <<------ 
+--------------------------------------------------------
+"""
+
+
+""" Verarbeitet den printcommand. Ueberprueft, ob Parameter oder Pokemon angegeben wurden, fordert uU eine Pokemonangabe an und stoesst den Printvorgang an.
+arguments sollte hier ein String sein, der der Konsoleneingabe des printcommands entspricht. """
+def process_print_command(arguments):
+    # Die erste Angabe fuehrte zum Aufruf der Methode (und ist damit pr oder zeige) und hat keine Relevanz mehr
+    # Daher wird sie hier entfernt
+    arguments = arguments.split(' ', 1)
+    # Der Aufruf [1:] entfernt das erste von beiden Elementen aus der Liste, belässt arguments aber als Liste und 
+    # wandelt es nicht in String um, wie [1] es tun würde
+    arguments = arguments[1:]
+    if len(arguments) > 0:
+        if arguments[0].startswith('-'):
+            print_pokemon_by_args(arguments[0])
+        else:
+            print_pokemon(arguments[0])
     else:
-        return pk
+        pokem = raw_input('Welches Pokemon? > ')
+        if pokem == '' or pokem == 'all':
+            print_pokemon_by_args('')
+        else:
+            print_pokemon(pokem)
+
+""" Stösst die Ausgabe von ein, mehrere oder allen Pokemon an. Validiert Existenz und gibt ggf. Fehlermeldungen aus. """
+def print_pokemon(pokem):
+    if isinstance(pokem, basestring):
+        pkms = create_list(pokem)
         
+        if len(pkms) == 0 :
+            print "Ungueltiges Pokemon '{0}'".format(pokem)
+            return
+        
+        for pokemon in pkms:
+            if not pkdao.valid_pk(pokemon):
+                print "Ungueltiges Pokemon '{0}'".format(pokemon)
+            else:
+                print_output(pokemon)
+                
+        
+    #Ist das Pokemon ein int-Wert, wurde es im vorherigen Programmverlauf bereits auf Gueltigkeit geprueft.
+    elif isinstance(pokem, int):
+        print_output(pokem)
+  
+""" Stoesst die Ausgabe der Pokemon an, auf die die Argumente passen """
+def print_pokemon_by_args(arguments): 
+    list = get_pklist_by_args(arguments)
+    
+    if len(list) > 100:
+        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)+1))
+        if dispall == 'no' or dispall == 'n':
+            return
+            
+    for pk in list:
+        print_pokemon(pk)
+        
+""" Erzeugt die Ausgabe eines einzelnen Pokemon auf der Konsole. Als Argument wird Nummer oder Name des Pokemon erwartet """
+def print_output(pokemon):
+    pkinfo, locs = pkdao.get_pkinfo(pokemon)
+            
+    catch = " ( ) "
+    if pkinfo[2] != 0:
+        catch = "gefangen!"
+    
+    info = ''
+    if pkinfo[3] != None:
+        info = "Info: '{0}'".format(pkinfo[3])
+    
+    print u"{0} {1},\t {2} \t {3}".format(pkinfo[0], pkinfo[1], catch, info)
+
+    if len(locs) > 0:
+        print "\t - - - - - - - - - - - - - -"
+    for loc in locs:
+        print u"\t Fangbar in {0}, {1}".format(loc[0], loc[1])
+    if len(locs) > 0:
+        print "\t - - - - - - - - - - - - - -"
+        
+""" 
+-----------------------------------------------------------------
+------>> Methoden, die die betroffenen Pokemon ermitteln <<------ 
+-----------------------------------------------------------------
+"""        
+  
+  
+""" Vearbeitet die Listen oder Rangeangabe und erstellt eine Int-Range oder eine Stringliste der betroffenen Pokemonnummern bzw. -Namen anhand der uebergebenen Pokemonangaben. """  
 def create_list(pks):
 
     pkms = []
 
     if re.match('[\w]+[-][\w]+', pks) != None:
-        start, sep, end = pks.partition('-')
+        start, end = pks.split('-')
         if re.match('[0-9]+[-][0-9]+', pks) != None:
             pkms = range(int(start), int(end)+1)
         else:
@@ -63,46 +154,9 @@ def create_list(pks):
         pkms = pkdao.get_pk_list_by_namesnippet(pks)
         
     return pkms
-    
-# Ermoeglicht den Aufruf von print_pokemon mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.
-def prp(arguments):
-    arguments = arguments.split(' ', 1)
-    arguments = arguments [1:]
-    if len(arguments) > 0:
-        if arguments[0].startswith('-'):
-            printa(arguments[0])
-        else:
-            print_pokemon(arguments[0])
-    else:
-        pokem = raw_input('Welches Pokemon? > ')
-        if pokem == '' or pokem == 'all':
-            printa('')
-        else:
-            print_pokemon(pokem)
 
-# Gibt ein, mehrere oder alle Pokemon mitsamt Locationinformation aus.
-def print_pokemon(pokem):
-
-    if isinstance(pokem, str):
-        
-        pkms = create_list(pokem)
-        
-        if len(pkms) == 0 :
-            print "Ungueltiges Pokemon '{0}'".format(pokem)
-            return
-        
-        for pokemon in pkms:
-            if not pkdao.valid_pk(pokemon):
-                print "Ungueltiges Pokemon '{0}'".format(pokemon)
-            else:
-                printer(pokemon)
-                
-        
-    #Ist das Pokemon ein int-Wert, wurde es im vorherigen Programmverlauf bereits auf Gueltigkeit geprueft.
-    elif isinstance(pokem, int):
-        printer(pokem)
-        
-def get_pklist(arguments):
+""" Erstellt eine Liste mit allen Pokemonnummern, auf die die Argumente passen. Bei unbekannten Parametern wird eine Fehlermeldung ausgegeben und abgebrochen. """    
+def get_pklist_by_args(arguments):
     arguments = arguments.split('-')
     arguments = arguments [1:]
 
@@ -113,58 +167,19 @@ def get_pklist(arguments):
             return
 
     return pkdao.get_pk_list_by_args(arguments)
-    
-def create_html(arguments):
-    list = get_pklist(arguments)
-    if len(list) == 0:
-        print "Diese Abfrage enhaelt keine Ergebnisse. HTML wird nicht erstellt."
-        return;
-    prp(arguments)
-    htmlconfirm = raw_input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower()
-    if htmlconfirm != 'n' and htmlconfirm != 'no':
-        pkdao.create_html(list, arguments)
-    
-  
-#Gibt eine pokemonliste nach den uebergebenen argumenten gefiltert aus
-def printa(arguments):
+ 
 
-    
-    list = get_pklist(arguments)
-    
-    if len(list) > 100:
-        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)+1))
-        if dispall == 'no' or dispall == 'n':
-            return
-            
-    for pk in list:
-        print_pokemon(pk)
-       
-        
-# Macht die Ausgabe eines Pokemon. Wird nie direkt ueber das runmodul aufgerufen.
-def printer(pokemon):
-    #pkmns = pkdao.get_pk_list_by_namesnippet(pokemon)
-    #for pk in pkmns:
-    pkinfo, locs = pkdao.get_pkinfo(pokemon)
-            
-    catch = " ( ) "
-    if pkinfo[2] != 0:
-        catch = "gefangen!"
-    
-    info = ''
-    if pkinfo[3] != None:
-        info = "Info: '{0}'".format(pkinfo[3])
-    
-    print u"{0} {1},\t {2} \t {3}".format(pkinfo[0], pkinfo[1], catch, info)
+""" 
+>>>>>>>>>
+---------------------------------------------------------
+------------->> Methoden fuer addloc/rmloc <<------------- 
+---------------------------------------------------------
+>>>>>>>>>
+"""
 
-    if len(locs) > 0:
-        print "\t - - - - - - - - - - - - - -"
-    for loc in locs:
-        print u"\t Fangbar in {0}, {1}".format(loc[0], loc[1])
-    if len(locs) > 0:
-        print "\t - - - - - - - - - - - - - -"
-  
-# Ermoeglicht den Aufruf von add_location mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
-def addloc(arguments):
+
+""" Verarbeitet den addloc-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """
+def process_addloc(arguments):
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
     if len(arguments) > 0:
@@ -173,7 +188,7 @@ def addloc(arguments):
         pokem = raw_input('Pokemonnr oder -name? > ')
         add_location(pokem)      
         
-# Fuegt den angegebenen Pokemon eine Location, also einen Fundort, bestehend aus Edition und Fundort, hinzu
+""" Fragt Edition und Fundort ab. Fuegt den angegebenen Pokemon eine Location, also einen Fundort, bestehend aus Edition und Fundort, hinzu """
 def add_location(pokem):
     edition = raw_input('Welche Edition? > ')
     location = raw_input('Welche Location? > ')
@@ -207,8 +222,8 @@ def add_location(pokem):
   
 
     
-# Ermoeglicht den Aufruf von rm_location mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
-def rmloc(arguments):
+""" Verarbeitet den rmloc-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """
+def process_rmloc(arguments):
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
     if len(arguments) > 0:
@@ -217,9 +232,10 @@ def rmloc(arguments):
         pokem = raw_input('Pokemonnr oder -name? > ')
         rm_location(pokem)      
  
-# Loescht Locationeintraege. 
+""" Erfragt Informationen zu den loeschenden Locationangaben. 
+Loescht die Locationangaben der uebergebenen Pokemon. 
+Bei ungueltigen Pokemon oder Pokemon ohne Locationeintrag wird eine Fehlermeldung erzeugt. """
 def rm_location(pokem):
-    
     pkms = create_list(pokem)
     
     invalidpk = 0
@@ -261,9 +277,19 @@ def rm_location(pokem):
                     print_pokemon(pokemon)
                 morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
                 morerm = morerm.lower()
-            
-# Ermoeglicht den Aufruf von set_info mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
-def addinf(arguments):
+
+                
+""" 
+>>>>>>>>>
+------------------------------------------------------------
+------------->> Methoden fuer addinfo/rminfo <<------------- 
+------------------------------------------------------------
+>>>>>>>>>
+"""
+
+
+""" Verarbeitet den addinfo-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """   
+def process_addinfo(arguments):
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
     if len(arguments) > 0:
@@ -272,6 +298,7 @@ def addinf(arguments):
         pokem = raw_input('Pokemonnr oder -name? > ')
         set_info(pokem) 
 
+""" Erfragt die einzutragende Information, traegt sie fuer die uebergebenen Pokemon ein und gibt bei ungueltigen Pokemon eine Fehlermeldung zurueck"""
 def set_info(pokem):
     info = raw_input('Info? > ')
     pkms = create_list(pokem)
@@ -283,19 +310,23 @@ def set_info(pokem):
             pkdao.set_info(pokemon, info)
             print_pokemon(pokemon)
     
-# Ermoeglicht den Aufruf von rm_info mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
-def rminf(arguments):
+""" Verarbeitet den rminfo-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """   
+def process_rminfo(arguments):
+    # Die erste Angabe fuehrte zum Aufruf der Methode (und ist damit pr oder zeige) und hat keine Relevanz mehr
+    # Daher wird sie hier entfernt
     arguments = arguments.split(' ', 1)
-    arguments = arguments [1:]
+    # Der Aufruf [1:] entfernt das erste von beiden Elementen aus der Liste, belässt arguments aber als Liste und 
+    # wandelt es nicht in String um, wie [1] es tun würde
+    arguments = arguments[1:]
     if len(arguments) > 0:
         rm_info(arguments[0])
     else:
         pokem = raw_input('Von welchem Pokemon wollen Sie die Info loeschen? > ')
         rm_info(pokem) 
-        
+  
+""" Loescht die Information der uebergebenen Pokemon. Ist ein Pokemon ungueltig, wird eine Fehlermeldung zurueckgegebe. """  
 def rm_info(pokem):
     pkms = create_list(pokem)
-    
     for pokemon in pkms:
         if not pkdao.valid_pk(pokemon):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
@@ -303,53 +334,53 @@ def rm_info(pokem):
             pkdao.rm_info(pokemon)
             print_pokemon(pokemon)
   
-# Ermoeglicht den Aufruf von set_c mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
-def ct(arguments):
+""" 
+>>>>>>>>>
+------------------------------------------------------
+------------->> Methoden fuer ct / uct <<------------- 
+------------------------------------------------------
+>>>>>>>>>
+"""
+  
+  
+""" Verarbeitet den ct- und uct-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """    
+def process_ct_uct(arguments, catched):
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
     if len(arguments) > 0:
         set_c(arguments[0])
     else:
         pokem = raw_input('Pokemonnr oder -name? > ')
-        set_c(pokem) 
+        set_c(pokem, catched) 
   
-def set_c(pokem):
-    print 'Herzlichen Glueckwunsch zum Fangerfolg! :)'
+""" Setzt den Catchwert der uebergebenen Pokemon auf 1 fuer gefangen oder 0 fuer ungefangen """
+def set_c(pokem, catched):
+    if catched == 1:
+        print 'Herzlichen Glueckwunsch zum Fangerfolg! :)'
     pkms = create_list(pokem)
     
     for pokemon in pkms:
         if not pkdao.valid_pk(pokemon):
             print "Ungueltiges Pokemon '{0}'".format(pokemon)
         else:
-            pkdao.set_c(pokemon, 1)
+            pkdao.set_c(pokemon, catched)
             print_pokemon(pokemon)
-           
             
-# Ermoeglicht den Aufruf von uset_c mit direkt angegebenen Parametern. Fehlt die direkte Angabe, wird abgefragt.   
-def uct(arguments):
-    arguments = arguments.split(' ', 1)
-    arguments = arguments [1:]
-    if len(arguments) > 0:
-        uset_c(arguments[0])
-    else:
-        pokem = raw_input('Pokemonnr oder -name? > ')
-        uset_c(pokem)  
-    
-#Markiert uebergebene Pokemon als ungefangen
-def uset_c(pokem):
-    pkms = create_list(pokem)
-    
-    for pokemon in pkms:
-        if not pkdao.valid_pk(pokemon):
-            print "Ungueltiges Pokemon '{0}'".format(pokemon)
-        else:
-            pkdao.set_c(pokemon, 0)
-            print_pokemon(pokemon)
+           
+""" 
+>>>>>>>>>
+-----------------------------------------------------------
+------------->> Methoden zum Dateischreiben <<------------- 
+-----------------------------------------------------------
+>>>>>>>>>
+"""            
  
+""" Fragt den Dateinamen fuer die Backupdatei nach und stoesst das Dateischreiben an. """ 
 def backup():
     filename = raw_input('Wie soll die Backupdatei heissen? > ')
     pkdao.create_backup(filename)
   
+""" Macht Confirmnachfrage und validiert die Backupdatei. Macht ggf. Fehlermeldung, stoesst sonst den Restorevorgang an. """
 def restore():
     confirm = raw_input('Sind Sie sich sicher, das sie die Datenbank wiederherstellen wollen? \n Alle Daten, die nicht in der Backupdatei enthalten sind, werden ueberschrieben! \n Die Wiederherstellung nimmt einige Zeit in Anspruch. \n Tippen Sie YES, wenn sie sich sicher sind. > ')
     if confirm == 'YES':
@@ -363,11 +394,8 @@ def restore():
             print 'Die uebergebene Datei ist nicht existent'
     else:
         print 'Eingabe entspricht nicht YES, Wiederherstellungsvorgang wird abgebrochen.'
-        
-def announce_restore_state(nr):
-    print 'Wiederherstellung laeuft... Pokemon Nr. {0}'.format(nr)
 
-  
+""" Fragt nach, ob Infos mit exportiert werden sollen und stoesst das Dateischreiben an. """        
 def export(): 
     info = raw_input('Moechten Sie die Infos mit exportieren? Y/no > ').lower()
     if info == 'no' or info == 'n':
@@ -375,6 +403,8 @@ def export():
     else:
         pkdao.export(True)
 
+""" Fragt Dateinamen, aus dem importiert werden soll, nach, ueberpruft dessen Gueltigkeit und stoesst den Import an. Stoesst ausserdem bei Erfolg die 
+Ausgabe der durch den Importvorgang betroffenen Pokemon an. """ 
 def import_file():
     file = raw_input('Aus welcher Datei soll importiert werden? > ')
     if (check_filename(file)):
@@ -383,12 +413,33 @@ def import_file():
         if (success != None):
             print 'Import war erfolgreich!'
             for pk in success:
-                printer(pk)
+                print_output(pk)
         else:
             print 'Der Import konnte nicht durchgefuehrt werden.'
     else:
         print 'Die uebergebene Datei ist nicht existent'
+
+""" Gibt die betroffenen Pokemon aus und ueberprueft, ob die Abfrage leer ist. Falls nicht, wird eine Bestaetigung erbeten und das Dateischreiben angestossen. """
+def create_html(arguments):
+    list = get_pklist_by_args(arguments)
+    if len(list) == 0:
+        print "Diese Abfrage enhaelt keine Ergebnisse. HTML wird nicht erstellt."
+        return;
+    process_print_command(arguments)
+    htmlconfirm = raw_input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower()
+    if htmlconfirm != 'n' and htmlconfirm != 'no':
+        pkdao.create_html(list, arguments)        
+
         
+""" 
+>>>>>>>>>
+--------------------------------------------------------------------
+------------->> Validierende Methoden, sonstige Ausgaben <<------------- 
+--------------------------------------------------------------------
+>>>>>>>>>
+"""  
+
+""" Ueberprueft, ob die Datei mit uebergebenen Namen existiert und sich oeffnen laesst. """         
 def check_filename(name):
     try: 
         file = open(name, "r") 
@@ -396,10 +447,20 @@ def check_filename(name):
         return True;
     except IOError:
         return False;
-    
-    
+
+
+""" Ermoeglicht eine Konsolenangabe, wie weit der Restoreprozess ist. Wird aus pkdao aufgerufen. """        
+def announce_restore_state(nr):
+    print 'Wiederherstellung laeuft... Pokemon Nr. {0}'.format(nr)
+
+""" Fuegt ein neues Pokemon mit Nummer und Name in die Datenbank ein.
+
+Die Methode ist zum Debuggen da - im Normalfall sollte ein Einfuegen von Pokemondaten nicht noetig sein.
+Zur Aktivierung add_pk in die Konsole eingeben, auf >>> erneut add_pk, dann Nummer und Pokemonname  """    
 def add_pk(nr, name):
     pkdao.add_pk(nr, name)
+    
+""" Verarbeitet den Befehl credit und gibt die Credits aus. """    
 def credit():
     print '- - - Credits - - -'
     print 'Pokemonmanager V{0}'.format(ver)

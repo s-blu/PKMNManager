@@ -23,7 +23,7 @@ import re
 import pkview
 import codecs
 
-conn = sqlite3.connect('db/pkmmanager.db')
+conn = sqlite3.conneprocess_ct_uct('db/pkmmanager.db')
 c = conn.cursor()
 
 
@@ -41,7 +41,7 @@ c = conn.cursor()
 --------------------------------------------------------
 """
 
-""" Ueberprueft die Existenz des angegebenen Pokemonnamen oder der angegebenen Nummer """
+""" Ueberprueft die Existenz des angegebenen Pokemonnamen oder der angegebenen Nummer. Ist es existent, wird True zurueckgegeben, false sonst """
 # TODO: Ueberpruefen, ob Implementierung sinnvoll (v.a. zweiter teil)
 def valid_pk(pokemon):
     #holt die nr des pokemon, falls name angegeben

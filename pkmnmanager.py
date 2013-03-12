@@ -90,19 +90,19 @@ def run():
                 running = False
                 pkview.close()
             elif 'zeige' in func or 'pr' in func:
-                pkview.prp(func)
+                pkview.process_print_command(func)
             elif 'addloc' in func or 'neuerort' in func:
-                pkview.addloc(func)
+                pkview.process_addloc(func)
             elif 'removeloc' in func or 'rmloc' in func or 'loescheort' in func:
-                pkview.rmloc(func)
+                pkview.process_rmloc(func)
             elif 'addinfo' in func or 'neueinfo' in func:
-                pkview.addinf(func)
+                pkview.process_addinfo(func)
             elif 'removeinfo' in func or 'rminfo' in func or 'loescheinfo' in func:
-                pkview.rminf(func)
+                pkview.process_rminfo(func)
             elif 'unsetcatch' in func or 'uct' in func or 'ungefangen' in func:
-                pkview.uct(func)
+                pkview.process_ct_uct(func, 0)
             elif 'setcatch' in func or 'ct'in func or 'gefangen' in func:
-                pkview.ct(func)
+                pkview.process_ct_uct(func, 1)
             elif 'credit' in func:
                 pkview.credit()
             elif 'clear' in func:
