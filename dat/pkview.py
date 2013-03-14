@@ -55,7 +55,7 @@ def process_print_command(arguments):
         else:
             print_pokemon(arguments[0])
     else:
-        pokem = raw_input('Welches Pokemon? > ')
+        pokem = to_unicode(raw_input('Welches Pokemon? > '))
         if pokem == '' or pokem == 'all':
             print_pokemon_by_args('')
         else:
@@ -86,7 +86,7 @@ def print_pokemon_by_args(arguments):
     list = get_pklist_by_args(arguments)
     
     if len(list) > 100:
-        dispall = raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)+1))
+        dispall = to_unicode(raw_input('Moechten Sie alle {0} Pokemon anzeigen lassen? Y/no > '.format(len(list)+1)))
         if dispall == 'no' or dispall == 'n':
             return
             
@@ -185,13 +185,13 @@ def process_addloc(arguments):
     if len(arguments) > 0:
         add_location(arguments[0])
     else:
-        pokem = raw_input('Pokemonnr oder -name? > ')
+        pokem = to_unicode(raw_input('Pokemonnr oder -name? > '))
         add_location(pokem)      
         
 """ Fragt Edition und Fundort ab. Fuegt den angegebenen Pokemon eine Location, also einen Fundort, bestehend aus Edition und Fundort, hinzu """
 def add_location(pokem):
-    edition = raw_input('Welche Edition? > ')
-    location = raw_input('Welche Location? > ')
+    edition = to_unicode(raw_input('Welche Edition? > '))
+    location = to_unicode(raw_input('Welche Location? > '))
     
     pkms = create_list(pokem)
     invalidpk = 0
@@ -204,12 +204,12 @@ def add_location(pokem):
             
             print_pokemon(pokemon)
     if invalidpk < len(pkms):        
-        moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
+        moreinput = to_unicode(raw_input("Moechten Sie mehr Daten einpflegen? yes/N > "))
         moreinput = moreinput.lower()
         
         while moreinput == 'yes' or moreinput == 'y':
-            edition = raw_input('Welche Edition? > ')
-            loc = raw_input('Welche Location? > ')
+            edition = to_unicode(raw_input('Welche Edition? > '))
+            loc = to_unicode(raw_input('Welche Location? > '))
         
             for pokemon in pkms:
                 if not pkdao.valid_pk(pokemon):
@@ -217,7 +217,7 @@ def add_location(pokem):
                 else:
                     pkdao.add_loc(pokemon, edition, loc)
                     print_pokemon(pokemon)
-            moreinput = raw_input("Moechten Sie mehr Daten einpflegen? yes/N > ")
+            moreinput = to_unicode(raw_input("Moechten Sie mehr Daten einpflegen? yes/N > "))
             moreinput = moreinput.lower()
   
 
@@ -229,7 +229,7 @@ def process_rmloc(arguments):
     if len(arguments) > 0:
         rm_location(arguments[0])
     else:
-        pokem = raw_input('Pokemonnr oder -name? > ')
+        pokem = to_unicode(raw_input('Pokemonnr oder -name? > '))
         rm_location(pokem)      
  
 """ Erfragt Informationen zu den loeschenden Locationangaben. 
@@ -251,7 +251,7 @@ def rm_location(pokem):
                 print_pokemon(pokemon)
     
     if invalidpk < len(pkms):
-        rmall = raw_input('Sollen alle Eintraege geloescht werden? yes/N > ')
+        rmall = to_unicode(raw_input('Sollen alle Eintraege geloescht werden? yes/N > '))
         rmall = rmall.lower()
         if rmall == 'yes' or rmall == 'y':
             for pokemon in pkms:
@@ -260,22 +260,22 @@ def rm_location(pokem):
             
         else:
             print 'Spezifizieren Sie bitte den Eintrag der geloescht werden soll.'
-            edition = raw_input('Loeschen: Welche Edition? > ')
-            location = raw_input('Loeschen: Welche Location? > ')
+            edition = to_unicode(raw_input('Loeschen: Welche Edition? > '))
+            location = to_unicode(raw_input('Loeschen: Welche Location? > '))
             for pokemon in pkms:
                 pkdao.rm_loc(pokemon, edition, location)
                 print_pokemon(pokemon)
                           
-            morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
+            morerm = to_unicode(raw_input("Moechten Sie mehr Daten loeschen? yes/N > "))
             morerm = morerm.lower()
             
             while morerm == 'yes' or morerm == 'y':
-                edition = raw_input('Loeschen: Welche Edition? > ')
-                location = raw_input('Loeschen: Welche Location? > ')
+                edition = to_unicode(raw_input('Loeschen: Welche Edition? > '))
+                location = to_unicode(raw_input('Loeschen: Welche Location? > '))
                 for pokemon in pkms:
                     pkdao.rm_loc(pokemon, edition, location)
                     print_pokemon(pokemon)
-                morerm = raw_input("Moechten Sie mehr Daten loeschen? yes/N > ")
+                morerm = to_unicode(raw_input("Moechten Sie mehr Daten loeschen? yes/N > "))
                 morerm = morerm.lower()
 
                 
@@ -295,7 +295,7 @@ def process_addinfo(arguments):
     if len(arguments) > 0:
         set_info(arguments[0])
     else:
-        pokem = raw_input('Pokemonnr oder -name? > ')
+        pokem = to_unicode(raw_input('Pokemonnr oder -name? > '))
         set_info(pokem) 
 
 """ Erfragt die einzutragende Information, traegt sie fuer die uebergebenen Pokemon ein und gibt bei ungueltigen Pokemon eine Fehlermeldung zurueck"""
@@ -321,7 +321,7 @@ def process_rminfo(arguments):
     if len(arguments) > 0:
         rm_info(arguments[0])
     else:
-        pokem = raw_input('Von welchem Pokemon wollen Sie die Info loeschen? > ')
+        pokem = to_unicode(raw_input('Von welchem Pokemon wollen Sie die Info loeschen? > '))
         rm_info(pokem) 
   
 """ Loescht die Information der uebergebenen Pokemon. Ist ein Pokemon ungueltig, wird eine Fehlermeldung zurueckgegebe. """  
@@ -350,7 +350,7 @@ def process_ct_uct(arguments, catched):
     if len(arguments) > 0:
         set_c(arguments[0])
     else:
-        pokem = raw_input('Pokemonnr oder -name? > ')
+        pokem = to_unicode(raw_input('Pokemonnr oder -name? > '))
         set_c(pokem, catched) 
   
 """ Setzt den Catchwert der uebergebenen Pokemon auf 1 fuer gefangen oder 0 fuer ungefangen """
@@ -377,14 +377,14 @@ def set_c(pokem, catched):
  
 """ Fragt den Dateinamen fuer die Backupdatei nach und stoesst das Dateischreiben an. """ 
 def backup():
-    filename = raw_input('Wie soll die Backupdatei heissen? > ')
+    filename = to_unicode(raw_input('Wie soll die Backupdatei heissen? > '))
     pkdao.create_backup(filename)
   
 """ Macht Confirmnachfrage und validiert die Backupdatei. Macht ggf. Fehlermeldung, stoesst sonst den Restorevorgang an. """
 def restore():
     confirm = raw_input('Sind Sie sich sicher, das sie die Datenbank wiederherstellen wollen? \n Alle Daten, die nicht in der Backupdatei enthalten sind, werden ueberschrieben! \n Die Wiederherstellung nimmt einige Zeit in Anspruch. \n Tippen Sie YES, wenn sie sich sicher sind. > ')
     if confirm == 'YES':
-        filename = raw_input('Aus welcher Datei soll die Datenbank wiederhergestellt werden? > ')
+        filename = to_unicode(raw_input('Aus welcher Datei soll die Datenbank wiederhergestellt werden? > '))
         if (check_filename(filename)):
             if (pkdao.check_if_restorefile(filename)):
                 pkdao.restore(filename)
@@ -397,7 +397,7 @@ def restore():
 
 """ Fragt nach, ob Infos mit exportiert werden sollen und stoesst das Dateischreiben an. """        
 def export(): 
-    info = raw_input('Moechten Sie die Infos mit exportieren? Y/no > ').lower()
+    info = to_unicode(raw_input('Moechten Sie die Infos mit exportieren? Y/no > ').lower())
     if info == 'no' or info == 'n':
         pkdao.export(False)
     else:
@@ -406,7 +406,7 @@ def export():
 """ Fragt Dateinamen, aus dem importiert werden soll, nach, ueberpruft dessen Gueltigkeit und stoesst den Import an. Stoesst ausserdem bei Erfolg die 
 Ausgabe der durch den Importvorgang betroffenen Pokemon an. """ 
 def import_file():
-    file = raw_input('Aus welcher Datei soll importiert werden? > ')
+    file = to_unicode(raw_input('Aus welcher Datei soll importiert werden? > '))
     if (check_filename(file)):
         print 'Bitte warten....'
         success = pkdao.import_data(file)
@@ -426,7 +426,7 @@ def create_html(arguments):
         print "Diese Abfrage enhaelt keine Ergebnisse. HTML wird nicht erstellt."
         return;
     process_print_command(arguments)
-    htmlconfirm = raw_input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower()
+    htmlconfirm = to_unicode(raw_input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower())
     if htmlconfirm != 'n' and htmlconfirm != 'no':
         pkdao.create_html(list, arguments)        
 
@@ -471,7 +471,27 @@ def credit():
     print 'Anfang Juli 2012 gestartetes Projekt in Python'
     print 'Ein sparkling Flausch an Tsurai fuers Testen <3'
     print '- - - - - - - - -'
-    
+ 
+ 
+""" 
+>>>>>>>>>
+--------------------------------------
+------------->> Andere <<------------- 
+--------------------------------------
+>>>>>>>>>
+"""  
+
+
+""" Wandelt den uebergebenen String fuer bessere Kompatibilität in einen Unicodestring um"""
+def to_unicode(obj):
+    encoding='utf-8'
+    if isinstance(obj, basestring):
+        if not isinstance(obj, unicode):
+            obj = unicode(obj, encoding)
+    return obj
+
+
+""" Wird bei Programmende aufgerufen. Schliesst offene Verbindungen. """ 
 def close():
     pkdao.close()
         
