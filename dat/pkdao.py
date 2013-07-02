@@ -1,5 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
+﻿#!/usr/bin/python
 #Copyright 2012-2013 sam@s-blu.de
 #Diese Datei ist Teil von PKMNManager.
 
@@ -20,7 +19,7 @@
 """ Dieses Modul enthaelt alle Methoden, die Datenbankzugriffe vornehmen sowie jene, die Dateien schreiben oder lesen."""
 import sqlite3
 import re
-import pkview
+import dat.pkview
 import codecs
 
 conn = sqlite3.connect('db/pkmmanager.db')
