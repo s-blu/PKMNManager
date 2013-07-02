@@ -335,7 +335,7 @@ def restore(filename):
             catched = catched.strip()
             set_c(nr, catched)
             # Gibt der View Rueckmeldung, welche Pokemoninformationen gerade verarbeitet werden.
-            pkview.announce_restore_state(nr)
+            dat.pkview.announce_restore_state(nr)
             
             line = file.readline()
             #Die zweite Zeile enthaelt die Info oder ist leer, falls keine Info eingetragen war

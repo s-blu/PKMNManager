@@ -46,7 +46,7 @@ def run():
                 print( '================================================')
                 print( 'Sie befinden sich im Pokemonmanager V{0}!'.format(pkview.ver))
                 print( '- - -')
-                print( 'print(, pr, zeige')
+                print( 'print, pr, zeige')
                 print( '\t gibt die Daten gemaess der Parameter aus. Fuer alle Pokemon bei Nachfrage Enter druecken.')
                 print( '\t -g gibt alle gefangenen Pokemon aus')
                 print( '\t -ung gibt alle ungefangenen Pokemon aus')

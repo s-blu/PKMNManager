@@ -347,7 +347,7 @@ def process_ct_uct(arguments, catched):
     arguments = arguments.split(' ', 1)
     arguments = arguments [1:]
     if len(arguments) > 0:
-        set_c(arguments[0])
+        set_c(arguments[0], catched)
     else:
         pokem = input('Pokemonnr oder -name? > ')
         set_c(pokem, catched) 
@@ -381,7 +381,7 @@ def backup():
   
 """ Macht Confirmnachfrage und validiert die Backupdatei. Macht ggf. Fehlermeldung, stoesst sonst den Restorevorgang an. """
 def restore():
-    confirm = input('Sind Sie sich sicher, das sie die Datenbank wiederherstellen wollen? \n Alle Daten, die nicht in der Backupdatei enthalten sind, werden ueberschrieben! \n Die Wiederherstellung nimmt einige Zeit in Anspruch. \n Tippen Sie YES, wenn sie sich sicher sind. > ')
+    confirm = input('Sind Sie sich sicher, das sie die Datenbank wiederherstellen wollen? \n Alle Daten, die nicht in der Backupdatei enthalten sind, gehen verloren! \n Die Wiederherstellung nimmt einige Zeit in Anspruch. \n Tippen Sie YES, wenn sie sich sicher sind. > ')
     if confirm == 'YES':
         filename = input('Aus welcher Datei soll die Datenbank wiederhergestellt werden? > ')
         if (check_filename(filename)):
@@ -401,7 +401,7 @@ def export():
         pkdao.export(False)
     else:
         pkdao.export(True)
-
+    print("Export war erfolgreich!")
 """ Fragt Dateinamen, aus dem importiert werden soll, nach, ueberpruft dessen Gueltigkeit und stoesst den Import an. Stoesst ausserdem bei Erfolg die 
 Ausgabe der durch den Importvorgang betroffenen Pokemon an. """ 
 def import_file():
