@@ -514,7 +514,10 @@ def export(info):
 
 """Erstellt eine HTML, die in formatierter Weise das Ergebnis der print Abfrage enthaelt """
 def create_html(pkmns, args):
-    
+    """Mögliches Workaround für Umlaute in der HTML:
+    import html.parser
+    html_parser = html.parser.HTMLParser()
+    unescaped = html_parser.unescape(my_string)"""
     args = args.split('-')
     args = args [1:]
     filename = "html"

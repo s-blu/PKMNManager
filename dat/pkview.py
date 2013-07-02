@@ -394,7 +394,8 @@ def restore():
     else:
         print('Eingabe entspricht nicht YES, Wiederherstellungsvorgang wird abgebrochen.')
 
-""" Fragt nach, ob Infos mit exportiert werden sollen und stoesst das Dateischreiben an. """        
+""" Fragt nach, ob Infos mit exportiert werden sollen und stoesst das Dateischreiben an. """   
+#TODO: Dateinamenabfrage     
 def export(): 
     info = input('Moechten Sie die Infos mit exportieren? Y/no > ').lower()
     if info == 'no' or info == 'n':
