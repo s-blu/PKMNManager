@@ -23,7 +23,7 @@ import re
 import pkview
 import codecs
 
-conn = sqlite3.conneprocess_ct_uct('db/pkmmanager.db')
+conn = sqlite3.connect('db/pkmmanager.db')
 c = conn.cursor()
 
 
