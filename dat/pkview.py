@@ -62,7 +62,7 @@ def process_print_command(arguments):
 
 """ Stösst die Ausgabe von ein, mehrere oder allen Pokemon an. Validiert Existenz und gibt ggf. Fehlermeldungen aus. """
 def print_pokemon(pokem):
-    if isinstance(pokem, basestring):
+    if isinstance(pokem, str):
         pkms = create_list(pokem)
         
         if len(pkms) == 0 :
