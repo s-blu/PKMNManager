@@ -31,11 +31,10 @@ def run():
     running = True
     print("=====================================================")
     print( 'Willkommen im Pokemonmanager V{0}!'.format(pkview.ver))
-    print( 'prp/print( Ausgabe der Pokemon')
+    print( 'prp/print Ausgabe der Pokemon')
     print( 'addloc/info rmloc/info Aendern von Fundorten und Info')
     print( 'exit Programm beenden')
     print( 'help ausfuehrliche Hilfe'  )
-    print( 'Bitte keine Umlaute benutzen.')
     print( '=====================================================')
     
     try:
