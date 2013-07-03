@@ -21,6 +21,7 @@ import sqlite3
 import re
 import dat.pkview
 import codecs
+import html.parser
 
 conn = sqlite3.connect('db/pkmmanager.db')
 c = conn.cursor()
@@ -274,7 +275,7 @@ def set_info(pokemon, info):
     if isinstance(pokemon, str ) and not pokemon.isdigit():
         pokemon = get_pknr(pokemon)
     inserts = (info, pokemon)
-    c.execute(u'update pokemon set infos=? where nr=?', inserts)
+    c.execute('update pokemon set infos=? where nr=?', inserts)
 
     conn.commit()
  
@@ -476,7 +477,8 @@ def create_backup(filename):
 Je nach uebergebenen Wert werden zu diesen Pokemon die Informationen ebenfalls exportiert. """  
 #TODO: Im Falle des Mitexports von Informationen auch Pokemon ohne Location aber mit Info mitexportieren
 #TODO: Nur bestimmte Pokemon (per Range) exportieren?
-def export(info):
+#TODO: checken, ob file existiert ggf mit os.path.isfile(filename)
+def export(filename, info):
     # jenachdem, ob die info mitgespeichert wird, werden andere informationen gelesen und geschrieben
     if (info):
         q = 'select distinct pokemon.nr, pokemon.infos from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
@@ -485,14 +487,14 @@ def export(info):
         for row in c.execute(q):
             info = ("" if row[1] == None else row[1])
             pkmns.append([row[0], info])
-        #oeffnet die datei und screibt die infos und locations
-        backup = open("pkmnmanager-export", "w")
+        #oeffnet die datei und schreibt die infos und locations
+        backup = open(filename, "w")
         #vermerkt, das dies eine export mit infos ist
-        backup.write(u"True\n")
+        backup.write("True\n")
         for pkmn in pkmns:
-            backup.write(u"{0}\n \t{1} \n".format(pkmn[0], pkmn[1]))
+            backup.write("{0}\n \t{1} \n".format(pkmn[0], pkmn[1]))
             for row in c.execute('select edition, location from locations where nr = ?', (pkmn[0],)):
-                backup.write(u"\t {0} {1}\n".format(row[0], row[1]))
+                backup.write("\t {0} {1}\n".format(row[0], row[1]))
         backup.close()
     else:
         q = 'select distinct pokemon.nr from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
@@ -501,13 +503,13 @@ def export(info):
         for row in c.execute(q):
             pkmns.append(row[0])
         #oeffnet die datei und screibt die infos und locations
-        backup = open("pkmnmanager-export", "w")
+        backup = open(filename, "w")
         #vermerkt, das dies eine export ohne infos ist
-        backup.write(u"False\n")
+        backup.write("False\n")
         for pkmn in pkmns:
-            backup.write(u"{0}\n".format(pkmn))
+            backup.write("{0}\n".format(pkmn))
             for row in c.execute('select edition, location from locations where nr = ?', (pkmn,)):
-                backup.write(u"\t {0} {1}\n".format(row[0], row[1]))
+                backup.write("\t {0} {1}\n".format(row[0], row[1]))
         backup.close()
 
  
@@ -518,9 +520,11 @@ def create_html(pkmns, args):
     import html.parser
     html_parser = html.parser.HTMLParser()
     unescaped = html_parser.unescape(my_string)"""
+    html_parser = html.parser.HTMLParser()
+    
     args = args.split('-')
     args = args [1:]
-    filename = "html"
+    filename = "pokemon"
     for arg in args:
         filename += "_{0}".format(arg)
     filename += ".html"
@@ -529,13 +533,14 @@ def create_html(pkmns, args):
     for pk in pkmns:
         pkinfos, locs = get_pkinfo(pk)
         catch = "1.png" if pkinfos[2] == 1 else "0.png"
-        file.write("<h1><img src='dat/{2}' alt='{3}' class='ct'> {0} {1}</h1>\n".format(pkinfos[0], pkinfos[1], catch, pkinfos[2]))
+        unesc = html_parser.unescape(pkinfos[1]);
+        file.write("<h1><img src='dat/{2}' alt='{3}' class='ct'> {0} {1}</h1>\n".format(pkinfos[0], unesc, catch, pkinfos[2]))
         if pkinfos[3] != None:
-            file.write("\t<div class='info'><span class='infoi'>i</span> {0} </div>\n".format(pkinfos[3]))
+            file.write("\t<div class='info'><span class='infoi'>i</span> {0} </div>\n".format(html_parser.unescape(pkinfos[3])))
         if get_number_of_locs(pkinfos[0]) > 0:
             file.write("\t<table class='locs'>\n")
             for loc in locs:
-                file.write("\t\t<tr><td><b>{0}</b> </td><td>{1}</td></tr>\n".format(loc[0], loc[1]))
+                file.write("\t\t<tr><td><b>{0}</b> </td><td>{1}</td></tr>\n".format(html_parser.unescape(loc[0]), html_parser.unescape(loc[1])))
             file.write("\t</table>\n")
     file.writelines(("</body> \n", "</html>"))
     file.close()

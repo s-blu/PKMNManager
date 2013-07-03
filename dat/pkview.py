@@ -377,6 +377,13 @@ def set_c(pokem, catched):
 """ Fragt den Dateinamen fuer die Backupdatei nach und stoesst das Dateischreiben an. """ 
 def backup():
     filename = input('Wie soll die Backupdatei heissen? > ')
+    # Falls schon eine Datei mit dem übergebenen Namen existiert, wird nachgefragt, ob sie überschrieben werden soll
+    # Falls nicht, wird erneut nach dem Dateinamen gefragt
+    if (check_filename(filename)):
+        overwrite = input('Diese Datei existiert bereits. Soll sie überschrieben werden? yes/N > ').lower()
+        if overwrite == 'no' or overwrite == 'n' or  overwrite == '':
+            backup()
+            return;
     pkdao.create_backup(filename)
   
 """ Macht Confirmnachfrage und validiert die Backupdatei. Macht ggf. Fehlermeldung, stoesst sonst den Restorevorgang an. """
@@ -397,12 +404,23 @@ def restore():
 """ Fragt nach, ob Infos mit exportiert werden sollen und stoesst das Dateischreiben an. """   
 #TODO: Dateinamenabfrage     
 def export(): 
+    filename = input('Wie soll die Exportdatei heissen? > ')
+    # Falls schon eine Datei mit dem übergebenen Namen existiert, wird nachgefragt, ob sie überschrieben werden soll
+    # Falls nicht, wird erneut nach dem Dateinamen gefragt
+    if (check_filename(filename)):
+        overwrite = input('Diese Datei existiert bereits. Soll sie überschrieben werden? yes/N > ').lower()
+        if overwrite == 'no' or overwrite == 'n' or  overwrite == '':
+            export()
+            return;
     info = input('Moechten Sie die Infos mit exportieren? Y/no > ').lower()
     if info == 'no' or info == 'n':
-        pkdao.export(False)
+        info = False;
     else:
-        pkdao.export(True)
+        info = True;
+        
+    pkdao.export(filename, info)
     print("Export war erfolgreich!")
+    
 """ Fragt Dateinamen, aus dem importiert werden soll, nach, ueberpruft dessen Gueltigkeit und stoesst den Import an. Stoesst ausserdem bei Erfolg die 
 Ausgabe der durch den Importvorgang betroffenen Pokemon an. """ 
 def import_file():
@@ -420,11 +438,17 @@ def import_file():
         print('Die uebergebene Datei ist nicht existent')
 
 """ Gibt die betroffenen Pokemon aus und ueberprueft, ob die Abfrage leer ist. Falls nicht, wird eine Bestaetigung erbeten und das Dateischreiben angestossen. """
+#TODO: Rangeangabe nach Befehl geht nicht!
 def create_html(arguments):
     list = get_pklist_by_args(arguments)
-    if len(list) == 0:
-        print("Diese Abfrage enhaelt keine Ergebnisse. HTML wird nicht erstellt.")
-        return;
+    
+    try:
+        if len(list) == 0:
+            print("Diese Abfrage enhaelt keine Ergebnisse. HTML wird nicht erstellt.")
+            return
+    except TypeError:
+        print("Diese Abfrage ist fehlerhaft. HTML wird nicht erstellt.")
+        return
     process_print_command(arguments)
     htmlconfirm = input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower()
     if htmlconfirm != 'n' and htmlconfirm != 'no':
