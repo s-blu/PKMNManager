@@ -20,7 +20,7 @@ import sqlite3
 import dat.pkdao as pkdao
 import re
 
-ver = '0.5'
+ver = '0.6'
 
 
 
@@ -32,34 +32,20 @@ ver = '0.5'
 >>>>>>>>>
 """
 
-""" 
---------------------------------------------------------
------->> Methoden, die den Befehl verarbeiten <<------ 
---------------------------------------------------------
-"""
-
 
 """ Verarbeitet den printcommand. Ueberprueft, ob Parameter oder Pokemon angegeben wurden, fordert uU eine Pokemonangabe an und stoesst den Printvorgang an.
 arguments sollte hier ein String sein, der der Konsoleneingabe des printcommands entspricht. """
-def process_print_command(arguments):
-    # Die erste Angabe fuehrte zum Aufruf der Methode (und ist damit pr oder zeige) und hat keine Relevanz mehr
-    # Daher wird sie hier entfernt
-    arguments = arguments.split(' ', 1)
-    # Der Aufruf [1:] entfernt das erste von beiden Elementen aus der Liste, belässt arguments aber als Liste und 
-    # wandelt es nicht in String um, wie [1] es tun würde
-    arguments = arguments[1:]
-    if len(arguments) > 0:
-        if arguments[0].startswith('-'):
-            print_pokemon_by_args(arguments[0])
-        else:
-            print_pokemon(arguments[0])
+def process_print_command(arguments):   
+    args = determine_pokemon_declaration(arguments)
+    # Bei einem Aufruf mit Argumenten wird die Liste der auszugebenen Pokemon anders ermittelt
+    if args.startswith('-'):
+        print_pokemon_by_args(args)
     else:
-        pokem = input('Welches Pokemon? > ')
-        if pokem == '' or pokem == 'all':
+        if args == '' or args == 'all':
             print_pokemon_by_args('')
         else:
-            print_pokemon(pokem)
-
+            print_pokemon(args)
+            
 """ Stösst die Ausgabe von ein, mehrere oder allen Pokemon an. Validiert Existenz und gibt ggf. Fehlermeldungen aus. """
 def print_pokemon(pokem):
     if isinstance(pokem, str):
@@ -74,8 +60,7 @@ def print_pokemon(pokem):
                 print("Ungueltiges Pokemon '{0}'".format(pokemon))
             else:
                 print_output(pokemon)
-                
-        
+  
     #Ist das Pokemon ein int-Wert, wurde es im vorherigen Programmverlauf bereits auf Gueltigkeit geprueft.
     elif isinstance(pokem, int):
         print_output(pokem)
@@ -90,7 +75,7 @@ def print_pokemon_by_args(arguments):
             return
             
     for pk in list:
-        print_pokemon(pk)
+        print_output(pk)
         
 """ Erzeugt die Ausgabe eines einzelnen Pokemon auf der Konsole. Als Argument wird Nummer oder Name des Pokemon erwartet """
 def print_output(pokemon):
@@ -114,15 +99,16 @@ def print_output(pokemon):
         print("\t - - - - - - - - - - - - - -")
         
 """ 
+>>>>>>>>>
 -----------------------------------------------------------------
 ------>> Methoden, die die betroffenen Pokemon ermitteln <<------ 
 -----------------------------------------------------------------
+>>>>>>>>>
 """        
   
   
 """ Vearbeitet die Listen oder Rangeangabe und erstellt eine Int-Range oder eine Stringliste der betroffenen Pokemonnummern bzw. -Namen anhand der uebergebenen Pokemonangaben. """  
 def create_list(pks):
-
     pkms = []
 
     if re.match('[\w]+[-][\w]+', pks) != None:
@@ -164,6 +150,7 @@ def get_pklist_by_args(arguments):
         if not pkdao.is_known_arg(arg):
             print("Unbekannter Parameter '{0}'".format(arg))
             return
+        
 
     return pkdao.get_pk_list_by_args(arguments)
  
@@ -179,13 +166,8 @@ def get_pklist_by_args(arguments):
 
 """ Verarbeitet den addloc-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """
 def process_addloc(arguments):
-    arguments = arguments.split(' ', 1)
-    arguments = arguments [1:]
-    if len(arguments) > 0:
-        add_location(arguments[0])
-    else:
-        pokem = input('Pokemonnr oder -name? > ')
-        add_location(pokem)      
+    args = determine_pokemon_declaration(arguments)
+    add_location(args)
         
 """ Fragt Edition und Fundort ab. Fuegt den angegebenen Pokemon eine Location, also einen Fundort, bestehend aus Edition und Fundort, hinzu """
 def add_location(pokem):
@@ -223,13 +205,8 @@ def add_location(pokem):
     
 """ Verarbeitet den rmloc-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """
 def process_rmloc(arguments):
-    arguments = arguments.split(' ', 1)
-    arguments = arguments [1:]
-    if len(arguments) > 0:
-        rm_location(arguments[0])
-    else:
-        pokem = input('Pokemonnr oder -name? > ')
-        rm_location(pokem)      
+    args = determine_pokemon_declaration(arguments)
+    rm_location(args)      
  
 """ Erfragt Informationen zu den loeschenden Locationangaben. 
 Loescht die Locationangaben der uebergebenen Pokemon. 
@@ -289,13 +266,8 @@ def rm_location(pokem):
 
 """ Verarbeitet den addinfo-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """   
 def process_addinfo(arguments):
-    arguments = arguments.split(' ', 1)
-    arguments = arguments [1:]
-    if len(arguments) > 0:
-        set_info(arguments[0])
-    else:
-        pokem = input('Pokemonnr oder -name? > ')
-        set_info(pokem) 
+    args = determine_pokemon_declaration(arguments)
+    set_info(args) 
 
 """ Erfragt die einzutragende Information, traegt sie fuer die uebergebenen Pokemon ein und gibt bei ungueltigen Pokemon eine Fehlermeldung zurueck"""
 def set_info(pokem):
@@ -311,17 +283,8 @@ def set_info(pokem):
     
 """ Verarbeitet den rminfo-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """   
 def process_rminfo(arguments):
-    # Die erste Angabe fuehrte zum Aufruf der Methode (und ist damit pr oder zeige) und hat keine Relevanz mehr
-    # Daher wird sie hier entfernt
-    arguments = arguments.split(' ', 1)
-    # Der Aufruf [1:] entfernt das erste von beiden Elementen aus der Liste, belässt arguments aber als Liste und 
-    # wandelt es nicht in String um, wie [1] es tun würde
-    arguments = arguments[1:]
-    if len(arguments) > 0:
-        rm_info(arguments[0])
-    else:
-        pokem = input('Von welchem Pokemon wollen Sie die Info loeschen? > ')
-        rm_info(pokem) 
+    args = determine_pokemon_declaration(arguments)
+    rm_info(args) 
   
 """ Loescht die Information der uebergebenen Pokemon. Ist ein Pokemon ungueltig, wird eine Fehlermeldung zurueckgegebe. """  
 def rm_info(pokem):
@@ -344,13 +307,8 @@ def rm_info(pokem):
   
 """ Verarbeitet den ct- und uct-command. Wenn die direkte Pokemonangabe hinter dem Befehl fehlt, wird abgefragt. """    
 def process_ct_uct(arguments, catched):
-    arguments = arguments.split(' ', 1)
-    arguments = arguments [1:]
-    if len(arguments) > 0:
-        set_c(arguments[0], catched)
-    else:
-        pokem = input('Pokemonnr oder -name? > ')
-        set_c(pokem, catched) 
+    args = determine_pokemon_declaration(arguments)
+    set_c(args, catched) 
   
 """ Setzt den Catchwert der uebergebenen Pokemon auf 1 fuer gefangen oder 0 fuer ungefangen """
 def set_c(pokem, catched):
@@ -440,6 +398,7 @@ def import_file():
 """ Gibt die betroffenen Pokemon aus und ueberprueft, ob die Abfrage leer ist. Falls nicht, wird eine Bestaetigung erbeten und das Dateischreiben angestossen. """
 #TODO: Rangeangabe nach Befehl geht nicht!
 def create_html(arguments):
+    process_print_command(arguments)
     list = get_pklist_by_args(arguments)
     
     try:
@@ -449,7 +408,6 @@ def create_html(arguments):
     except TypeError:
         print("Diese Abfrage ist fehlerhaft. HTML wird nicht erstellt.")
         return
-    process_print_command(arguments)
     htmlconfirm = input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower()
     if htmlconfirm != 'n' and htmlconfirm != 'no':
         pkdao.create_html(list, arguments)        
@@ -458,10 +416,24 @@ def create_html(arguments):
 """ 
 >>>>>>>>>
 --------------------------------------------------------------------
-------------->> Validierende Methoden, sonstige Ausgaben <<------------- 
+------------->> Sonstige Methoden <<------------- 
 --------------------------------------------------------------------
 >>>>>>>>>
 """  
+
+
+""" Überprüft, ob mit dem Befehl eine direkte Pokemonangabe gemacht wurde. Falls nicht, wird eine Angabe erfragt und zurueckgegeben."""
+def determine_pokemon_declaration(arguments):
+    #Der erste Teil, mit einem leerzeichen getrennt, ist stets der Aufruf der entsprechenden Methode und wird nicht mehr benoetigt
+    arguments = arguments.split(' ', 1)
+    arguments = arguments [1:]
+    #Sollte es nach dem Methodenaufruf noch Angaben geben, so wurde direkt eine Pokemonangabe uebergeben. Anderenfalls wird abgefragt.
+    if len(arguments) == 0:
+        arguments = input('Pokemonnr, -name, Liste oder Range? > ')
+    else:
+        arguments = arguments[0]
+    
+    return arguments
 
 """ Ueberprueft, ob die Datei mit uebergebenen Namen existiert und sich oeffnen laesst. """         
 def check_filename(name):

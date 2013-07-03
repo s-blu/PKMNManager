@@ -31,8 +31,8 @@ def run():
     running = True
     print("=====================================================")
     print( 'Willkommen im Pokemonmanager V{0}!'.format(pkview.ver))
-    print( 'prp/print Ausgabe der Pokemon')
-    print( 'addloc/info rmloc/info Aendern von Fundorten und Info')
+    print( 'pr/print Ausgabe der Pokemon')
+    print( 'addloc/addinfo rmloc/rminfo Hinzufügen/Entfernen von Fundorten/Info')
     print( 'exit Programm beenden')
     print( 'help ausfuehrliche Hilfe'  )
     print( '=====================================================')
