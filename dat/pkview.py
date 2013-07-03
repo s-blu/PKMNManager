@@ -396,11 +396,20 @@ def import_file():
         print('Die uebergebene Datei ist nicht existent')
 
 """ Gibt die betroffenen Pokemon aus und ueberprueft, ob die Abfrage leer ist. Falls nicht, wird eine Bestaetigung erbeten und das Dateischreiben angestossen. """
-#TODO: Rangeangabe nach Befehl geht nicht!
 def create_html(arguments):
-    process_print_command(arguments)
-    list = get_pklist_by_args(arguments)
-    
+    args = determine_pokemon_declaration(arguments) 
+    # Bei einem Aufruf mit Argumenten wird die Liste der auszugebenen Pokemon anders ermittelt
+    if args.startswith('-'):
+        list = get_pklist_by_args(args)
+        print_pokemon_by_args(args)
+    else:
+        if args == '' or args == 'all':
+            list = get_pklist_by_args('')
+            print_pokemon_by_args('')
+        else:
+            list = create_list(args)
+            print_pokemon(args)
+        
     try:
         if len(list) == 0:
             print("Diese Abfrage enhaelt keine Ergebnisse. HTML wird nicht erstellt.")
@@ -410,7 +419,8 @@ def create_html(arguments):
         return
     htmlconfirm = input('Moechten Sie diese Abfrage als HTML speichern? Y/no > ').lower()
     if htmlconfirm != 'n' and htmlconfirm != 'no':
-        pkdao.create_html(list, arguments)        
+        pkdao.create_html(list, args)        
+
 
         
 """ 

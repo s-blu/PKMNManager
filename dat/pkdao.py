@@ -21,7 +21,8 @@ import sqlite3
 import re
 import dat.pkview
 import codecs
-import html.parser
+import html
+import cgi
 
 conn = sqlite3.connect('db/pkmmanager.db')
 c = conn.cursor()
@@ -477,7 +478,6 @@ def create_backup(filename):
 Je nach uebergebenen Wert werden zu diesen Pokemon die Informationen ebenfalls exportiert. """  
 #TODO: Im Falle des Mitexports von Informationen auch Pokemon ohne Location aber mit Info mitexportieren
 #TODO: Nur bestimmte Pokemon (per Range) exportieren?
-#TODO: checken, ob file existiert ggf mit os.path.isfile(filename)
 def export(filename, info):
     # jenachdem, ob die info mitgespeichert wird, werden andere informationen gelesen und geschrieben
     if (info):
@@ -516,14 +516,9 @@ def export(filename, info):
 
 """Erstellt eine HTML, die in formatierter Weise das Ergebnis der print Abfrage enthaelt """
 def create_html(pkmns, args):
-    """Mögliches Workaround für Umlaute in der HTML:
-    import html.parser
-    html_parser = html.parser.HTMLParser()
-    unescaped = html_parser.unescape(my_string)"""
-    html_parser = html.parser.HTMLParser()
     
     args = args.split('-')
-    args = args [1:]
+    #args = args [1:]
     filename = "pokemon"
     for arg in args:
         filename += "_{0}".format(arg)
@@ -532,19 +527,28 @@ def create_html(pkmns, args):
     file.writelines(("<!doctype html> \n","<html> \n","<head><link href='dat/style.css' type='text/css' rel='stylesheet'></head> \n","<body> \n"))
     for pk in pkmns:
         pkinfos, locs = get_pkinfo(pk)
+        name = make_html_compatible(pkinfos[1])
         catch = "1.png" if pkinfos[2] == 1 else "0.png"
-        unesc = html_parser.unescape(pkinfos[1]);
-        file.write("<h1><img src='dat/{2}' alt='{3}' class='ct'> {0} {1}</h1>\n".format(pkinfos[0], unesc, catch, pkinfos[2]))
+        file.write("<h1><img src='dat/{2}' alt='{3}' class='ct'> {0} {1}</h1>\n".format(pkinfos[0], name, catch, pkinfos[2]))
         if pkinfos[3] != None:
-            file.write("\t<div class='info'><span class='infoi'>i</span> {0} </div>\n".format(html_parser.unescape(pkinfos[3])))
+            info = make_html_compatible(pkinfos[3])
+            file.write("\t<div class='info'><span class='infoi'>i</span> {0} </div>\n".format(info))
         if get_number_of_locs(pkinfos[0]) > 0:
             file.write("\t<table class='locs'>\n")
             for loc in locs:
-                file.write("\t\t<tr><td><b>{0}</b> </td><td>{1}</td></tr>\n".format(html_parser.unescape(loc[0]), html_parser.unescape(loc[1])))
+                ed = make_html_compatible(loc[0])
+                loc = make_html_compatible(loc[1])
+                file.write("\t\t<tr><td><b>{0}</b> </td><td>{1}</td></tr>\n".format(ed, loc))
             file.write("\t</table>\n")
     file.writelines(("</body> \n", "</html>"))
     file.close()
 
+def make_html_compatible(string):
+    string = cgi.escape(string).encode('ascii', 'xmlcharrefreplace')
+    string = string.decode('unicode-escape')
+
+    
+    return string
 
 """ 
 >>>>>>>>>
