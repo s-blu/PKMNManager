@@ -21,7 +21,6 @@ import sqlite3
 import re
 import dat.pkview
 import codecs
-import html
 import cgi
 
 conn = sqlite3.connect('db/pkmmanager.db')
