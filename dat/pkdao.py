@@ -25,7 +25,6 @@ import cgi
 
 conn = sqlite3.connect('db/pkmnmanager.db')
 c = conn.cursor()
-conn.text_factory = str
 
 """ 
 >>>>>>>>>

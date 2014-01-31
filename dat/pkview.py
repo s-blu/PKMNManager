@@ -335,6 +335,9 @@ def set_c(pokem, catched):
 """ Fragt den Dateinamen fuer die Backupdatei nach und stoesst das Dateischreiben an. """ 
 def backup():
     filename = input('Wie soll die Backupdatei heissen? > ')
+    if (filename == ""):
+        print('Kein Dateiname angegeben. Vorgang wird abgebrochen.')
+        return;
     # Falls schon eine Datei mit dem übergebenen Namen existiert, wird nachgefragt, ob sie überschrieben werden soll
     # Falls nicht, wird erneut nach dem Dateinamen gefragt
     if (check_filename(filename)):

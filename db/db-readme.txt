@@ -8,3 +8,5 @@ Solltet ihr die Datenbank KOMPLETT! resetten wollen:
 - Nennt die kopierte nun in pkmmanager.db um und ihr habt eine leere Datenbank.
 
 Alternativ ändert einfach den Pfad im Quellcode.
+
+Zur Sicherheit solltet ihr mit dem Befehl "backup" eine Backupdatei eurer Daten erstellen, damit sie nicht ein für alle Mal verloren sind!
