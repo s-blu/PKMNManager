@@ -23,9 +23,9 @@ import dat.pkview
 import codecs
 import cgi
 
-conn = sqlite3.connect('db/pkmmanager.db')
+conn = sqlite3.connect('db/pkmnmanager.db')
 c = conn.cursor()
-
+conn.text_factory = str
 
 """ 
 >>>>>>>>>
@@ -480,8 +480,8 @@ Je nach uebergebenen Wert werden zu diesen Pokemon die Informationen ebenfalls e
 def export(filename, info):
     # jenachdem, ob die info mitgespeichert wird, werden andere informationen gelesen und geschrieben
     if (info):
-        q = 'select distinct pokemon.nr, pokemon.infos from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
-        # Holt alle PKMN mit Nr und Info, fuer die Locations gespeichert sind
+        q = 'SELECT  DISTINCT pokemon.nr, pokemon.infos FROM pokemon, locations WHERE (pokemon.nr = locations.nr OR pokemon.infos IS NOT NULL )'
+        # Holt alle PKMN mit Nr und Info, fuer die Locations oder Infos gespeichert sind
         pkmns = []
         for row in c.execute(q):
             info = ("" if row[1] == None else row[1])
