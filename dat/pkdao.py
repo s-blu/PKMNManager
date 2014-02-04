@@ -382,9 +382,9 @@ def import_data(filename):
             # Falls es sich um einen Export mit Info handelt, ist die folgende Zeile die Info
             if ifinfos == "True":
                 info = line.strip()
-                # Falls eine Info angegeben, wird sie durch ein // getrennt an die bestehende angehaengt
+                # Falls eine Info angegeben, wird sie durch ein / getrennt an die bestehende angehaengt
                 if info != '':
-                    info = (get_info(nr) if get_info(nr) != None else "") + " // " + info
+                    info = (get_info(nr) + " / " if get_info(nr) != None else "") + info
                     set_info(nr, info)
                 line = file.readline()
             # Alle folgenden Editionen und Locations werden ausgelesen und eingetragen
