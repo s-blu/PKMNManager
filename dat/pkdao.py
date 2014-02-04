@@ -389,7 +389,7 @@ def import_data(filename):
                 line = file.readline()
             # Alle folgenden Editionen und Locations werden ausgelesen und eingetragen
             while (re.match(r"\t .*", line) != None):
-                loc = line.strip()
+                loc = line.strip()                    
                 ed, loc = loc.split(' ', 1)
                 add_loc(nr, ed, loc)
                 line = file.readline()
@@ -492,7 +492,9 @@ def export(filename, info):
         for pkmn in pkmns:
             backup.write("{0}\n \t{1} \n".format(pkmn[0], pkmn[1]))
             for row in c.execute('select edition, location from locations where nr = ?', (pkmn[0],)):
-                backup.write("\t {0} {1}\n".format(row[0], row[1]))
+                ed = ("-" if row[0] == "" else row[0])
+                loc = ("-" if row[1] == "" else row[1])
+                backup.write("\t {0} {1}\n".format(ed, loc))
         backup.close()
     else:
         q = 'select distinct pokemon.nr from pokemon join locations on pokemon.nr = locations.nr order by pokemon.nr'
@@ -507,7 +509,9 @@ def export(filename, info):
         for pkmn in pkmns:
             backup.write("{0}\n".format(pkmn))
             for row in c.execute('select edition, location from locations where nr = ?', (pkmn,)):
-                backup.write("\t {0} {1}\n".format(row[0], row[1]))
+                ed = ("-" if row[0] == "" else row[0])
+                loc = ("-" if row[1] == "" else row[1])
+                backup.write("\t {0} {1}\n".format(ed, loc))
         backup.close()
 
  
